@@ -9,62 +9,58 @@ import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
 
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.wossha.json.events.events.pictures.RemovePictureEvent.RemovePictureEvent;
-import com.wossha.json.events.events.pictures.SavePictureEvent.SavePictureEvent;
 import com.wossha.social.commands.CommandSerializers;
+import com.wossha.social.commands.followUser.FollowUserCommand;
+import com.wossha.social.commands.followUser.FollowUserSerializer;
+import com.wossha.social.commands.stopFollowingUser.StopFollowingUserCommand;
+import com.wossha.social.commands.stopFollowingUser.StopFollowingUserSerializer;
+import com.wossha.social.infrastructure.repositories.SocialRepository;
 
 @Configuration
 public class BeansConfig {
 	
-	/*@Bean
-	public FileRepository fileRpository() {
-			return new FileRepository();
+	@Bean
+	public SocialRepository socialRepository() {
+			return new SocialRepository();
 	}
 
+	
+	//commands--------------------------------------------------
 
 	@Bean
-	public SavePictureCommand savePictureCommand() {
-		return new SavePictureCommand();
+	public FollowUserCommand followUserCommand() {
+		return new FollowUserCommand();
 	}
 	
 	@Bean
-	public SavePictureSerializer savePictureSerializer() {
-		return new SavePictureSerializer();
-	}*/
+	public StopFollowingUserCommand stopFollowingUserCommand() {
+		return new StopFollowingUserCommand();
+	}
+	
+	//serializers--------------------------------------------------
+	
+	@Bean
+	public FollowUserSerializer followUserSerializer() {
+		return new FollowUserSerializer();
+	}
+	
+	@Bean
+	public StopFollowingUserSerializer stopFollowingUserSerializer() {
+		return new StopFollowingUserSerializer();
+	}
+	
+	
+	//--------------------------------------------------------------
 	
 	@Bean
 	public CommandSerializers commandSerializers() {
 		CommandSerializers cs = new CommandSerializers();
-		//cs.setModifyUserSerializer(savePictureSerializer());
+		cs.setFollowUserSerializer(followUserSerializer());
+		cs.setStopFollowingUserSerializer(stopFollowingUserSerializer());
 		cs.initMapper();
 		return cs;
 	}
 	
-	
-	//EVENTS----------------------------------------------------------------
-	@Bean
-	public SavePictureEvent savePictureEvent() {
-		return new SavePictureEvent();
-	}
-	
-	@Bean
-	public RemovePictureEvent removePictureEvent() {
-		return new RemovePictureEvent();
-	}
-	
-	
-	//EVENTS LISTENERS----------------------------------------------------------
-	/*@Bean
-	public SavePictureEventSerializer savePictureEventSerializer() {
-		return new SavePictureEventSerializer();
-	}
-	
-	@Bean
-	public RemovePictureEventSerializer removePictureEventSerializer() {
-		return new RemovePictureEventSerializer();
-	}*/
-	
-	//-------------------------------------------------------------------------
 	
 	@Bean
 	public ObjectMapper objectMapper() {
