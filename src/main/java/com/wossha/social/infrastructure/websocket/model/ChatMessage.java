@@ -4,11 +4,11 @@ import java.util.Date;
 
 public class ChatMessage {
 	
-	private Integer fromId;
-	private Integer toId;
+	private String fromId;
+	private String toId;
 	private String message;
 	
-	public ChatMessage(Integer fromId, Integer toId, String message) {
+	public ChatMessage(String fromId, String toId, String message) {
 		this.fromId = fromId;
 		this.toId = toId;
 		this.message = message;
@@ -17,19 +17,19 @@ public class ChatMessage {
 	public ChatMessage() {}
 
 
-	public Integer getFromId() {
+	public String getFromId() {
 		return fromId;
 	}
 
-	public void setFromId(Integer fromId) {
+	public void setFromId(String fromId) {
 		this.fromId = fromId;
 	}
 
-	public Integer getToId() {
+	public String getToId() {
 		return toId;
 	}
 
-	public void setToId(Integer toId) {
+	public void setToId(String toId) {
 		this.toId = toId;
 	}
 
