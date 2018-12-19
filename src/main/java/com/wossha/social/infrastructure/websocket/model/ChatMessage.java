@@ -1,37 +1,45 @@
 package com.wossha.social.infrastructure.websocket.model;
 
+import java.util.Date;
+
 public class ChatMessage {
-    private MessageType type;
-    private String content;
-    private String sender;
+	
+	private Integer fromId;
+	private Integer toId;
+	private String message;
+	
+	public ChatMessage(Integer fromId, Integer toId, String message) {
+		this.fromId = fromId;
+		this.toId = toId;
+		this.message = message;
+	}
 
-    public enum MessageType {
-        CHAT,
-        JOIN,
-        LEAVE
-    }
+	public ChatMessage() {}
 
-    public MessageType getType() {
-        return type;
-    }
 
-    public void setType(MessageType type) {
-        this.type = type;
-    }
+	public Integer getFromId() {
+		return fromId;
+	}
 
-    public String getContent() {
-        return content;
-    }
+	public void setFromId(Integer fromId) {
+		this.fromId = fromId;
+	}
 
-    public void setContent(String content) {
-        this.content = content;
-    }
+	public Integer getToId() {
+		return toId;
+	}
 
-    public String getSender() {
-        return sender;
-    }
+	public void setToId(Integer toId) {
+		this.toId = toId;
+	}
 
-    public void setSender(String sender) {
-        this.sender = sender;
-    }
+	public String getMessage() {
+		return message;
+	}
+
+	public void setMessage(String message) {
+		this.message = message;
+	}
+
+
 }
