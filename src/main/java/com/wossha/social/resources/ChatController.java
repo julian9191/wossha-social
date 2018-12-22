@@ -14,7 +14,9 @@ import com.wossha.social.infrastructure.repositories.SocialRepository;
 import com.wossha.social.infrastructure.websocket.model.ChatMessage;
 import com.wossha.social.infrastructure.websocket.model.ChatMessage2;
 
+import java.security.Principal;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +26,8 @@ import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
+import org.springframework.messaging.simp.SimpMessageSendingOperations;
+import org.springframework.messaging.simp.annotation.SendToUser;
 import org.springframework.messaging.simp.user.SimpUserRegistry;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -48,13 +52,33 @@ public class ChatController {
 	@Autowired
 	private Environment env;
 	
+	@Autowired
+    private SimpMessageSendingOperations messagingTemplate;
+	
 	SimpMessageHeaderAccessor headerAccessor;
 	
-    @MessageMapping("/chat.sendMessage")
+    /*@MessageMapping("/chat.sendMessage")
     @SendTo("/topic/public")
     public ChatMessage sendMessage(@Payload ChatMessage chatMessage) {
         return chatMessage;
-    }
+    }*/
+    
+    @MessageMapping("/chat.sendMessage")
+	//@SendToUser("/queue/reply")
+	public void sendMessage(@Payload ChatMessage chatMessage) throws Exception {
+    	//messagingTemplate.convertAndSendToUser(chatMessage.getToId(), "/queue/reply", chatMessage);
+    	//messagingTemplate.convertAndSendToUser(chatMessage.getFromId(), "/queue/reply", chatMessage);
+    	//return chatMessage;
+    	messagingTemplate.convertAndSend("/queue/reply-" + chatMessage.getToId(), chatMessage);
+	}
+    
+	/*@MessageMapping("/chat.sendMessage")
+    @SendToUser("/queue/reply")
+    public ChatMessage sendMessage(
+    		@Payload ChatMessage chatMessage, 
+    		Principal principal) throws Exception {
+    	return chatMessage;
+    }*/
 
     @MessageMapping("/chat.addUser")
     @SendTo("/topic/public")
