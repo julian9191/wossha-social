@@ -56,29 +56,15 @@ public class ChatController {
     private SimpMessageSendingOperations messagingTemplate;
 	
 	SimpMessageHeaderAccessor headerAccessor;
-	
-    /*@MessageMapping("/chat.sendMessage")
-    @SendTo("/topic/public")
-    public ChatMessage sendMessage(@Payload ChatMessage chatMessage) {
-        return chatMessage;
-    }*/
     
-    @MessageMapping("/chat.sendMessage")
-	//@SendToUser("/queue/reply")
-	public void sendMessage(@Payload ChatMessage chatMessage) throws Exception {
-    	//messagingTemplate.convertAndSendToUser(chatMessage.getToId(), "/queue/reply", chatMessage);
-    	//messagingTemplate.convertAndSendToUser(chatMessage.getFromId(), "/queue/reply", chatMessage);
-    	//return chatMessage;
-    	messagingTemplate.convertAndSend("/queue/reply-" + chatMessage.getToId(), chatMessage);
-	}
-    
-	/*@MessageMapping("/chat.sendMessage")
-    @SendToUser("/queue/reply")
-    public ChatMessage sendMessage(
+	@MessageMapping("/chat.sendMessage")
+    @SendToUser(destinations="/queue/reply", broadcast=false)
+    public void sendMessage(
     		@Payload ChatMessage chatMessage, 
     		Principal principal) throws Exception {
-    	return chatMessage;
-    }*/
+		
+		messagingTemplate.convertAndSendToUser(chatMessage.getToId(), "/queue/reply", chatMessage);
+    }
 
     @MessageMapping("/chat.addUser")
     @SendTo("/topic/public")

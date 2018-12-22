@@ -36,6 +36,7 @@ public static final String SECRET = Base64Utils.encodeToString("Alguna.Clave.Sec
 	//public static final long EXPIRATION_DATE = 30000L;//3600000/120
 	public static final String TOKEN_PREFIX = "Bearer ";
 	public static final String HEADER_STRING = "Authorization";
+	public static final String PARAM_STRING = "token";
 	
 	public String create(Authentication auth) throws IOException {
 
