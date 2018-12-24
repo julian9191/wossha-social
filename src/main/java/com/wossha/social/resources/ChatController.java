@@ -27,9 +27,6 @@ import org.springframework.web.bind.annotation.RestController;
 @CrossOrigin(origins = { "http://localhost:4200" })
 @RestController
 public class ChatController {
-
-	@Autowired
-	private SocialRepository repo;
 	
 	@Autowired
     JmsTemplate jmsTemplate;
@@ -37,19 +34,8 @@ public class ChatController {
 	@Autowired
 	private Environment env;
 	
-	@Autowired
-    private SimpMessageSendingOperations messagingTemplate;
-	
 	SimpMessageHeaderAccessor headerAccessor;
     
-	@MessageMapping("/chat.sendMessage")
-    @SendToUser(destinations="/queue/reply", broadcast=false)
-    public void sendMessage(
-    		@Payload ChatMessage chatMessage, 
-    		Principal principal) throws Exception {
-		
-		messagingTemplate.convertAndSendToUser(chatMessage.getToId(), "/queue/reply", chatMessage);
-    }
 
     @MessageMapping("/chat.addUser")
     @SendTo("/topic/public")
