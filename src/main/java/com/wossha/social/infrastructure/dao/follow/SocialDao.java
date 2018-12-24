@@ -10,6 +10,7 @@ import org.skife.jdbi.v2.sqlobject.customizers.RegisterMapper;
 import org.springframework.stereotype.Repository;
 import com.wossha.social.commands.followUser.model.FollowUser;
 import com.wossha.social.dto.FollowingUser;
+import com.wossha.social.infrastructure.websocket.model.ChatMessage;
 
 @Repository
 public abstract  class SocialDao {
@@ -27,16 +28,23 @@ public abstract  class SocialDao {
 			"SENDER_USERNAME=:username")
 	public abstract List<FollowingUser> getFollowingUsers(@Bind("username") String username);
 	
+	@RegisterMapper(ChatMessageMapperJdbi.class)
+	@SqlQuery("SELECT * FROM TWSS_CHAT_MESSAGES WHERE SENDER_USERNAME = :username OR RECEIVER_USERNAME = :username")
+	public abstract List<ChatMessage> getChatMessageHistory(@Bind("username") String username);
+
+	
 	// INSERTS--------------------------------------------------------------------------------------------------------------------------------------
 	
-	@RegisterMapper(FollowUserMapperJdbi.class)
 	@SqlUpdate("Insert into TWSS_FOLLOWERS (UUID,SENDER_USERNAME,RECEIVER_USERNAME,STATE) values (:followUser.uuid, :followUser.senderUsername, :followUser.receiverUsername, :followUser.state)")
 	public abstract void add(@BindBean("followUser") FollowUser followUser);
 	
+	@SqlUpdate("Insert into TWSS_CHAT_MESSAGES (SENDER_USERNAME,RECEIVER_USERNAME,MESSAGE,VIEWED) values (:message.fromId, :message.toId, :message.message, 1)")
+	public abstract void saveChatMessage(@BindBean("message") ChatMessage message);
 	
+
 	// REMOVES--------------------------------------------------------------------------------------------------------------------------------------
 	
-	@SqlUpdate("DELETE FROM TWSS_FOLLOWERS WHERE SENDER_USERNAME=:username AND RECEIVER_USERNAME=:followingUserName")
+	@SqlUpdate("DELETE FROM TWSS_CHAT_MESSAGES WHERE SENDER_USERNAME=:username AND RECEIVER_USERNAME=:followingUserName")
 	public abstract void stopFollowingUser(@Bind("username") String username, @Bind("followingUserName") String followingUserName);
 	
 }

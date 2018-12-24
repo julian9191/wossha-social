@@ -42,6 +42,8 @@ public class SendChatMessageWsCommand implements ICommand<SendChatMessage> {
 	public CommandResult execute() throws BusinessException, TechnicalException {
 		CommandResult result = new CommandResult();
 
+		repo.saveChatMessage(data.getMessage());
+		
 		messagingTemplate.convertAndSendToUser(data.getMessage().getToId(), WsDestinations.SEND_TO_USER_DEST.getValue(),
 				data.getMessage());
 
