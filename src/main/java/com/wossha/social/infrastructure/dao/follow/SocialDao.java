@@ -29,9 +29,12 @@ public abstract  class SocialDao {
 	public abstract List<FollowingUser> getFollowingUsers(@Bind("username") String username);
 	
 	@RegisterMapper(ChatMessageMapperJdbi.class)
-	@SqlQuery("SELECT * FROM TWSS_CHAT_MESSAGES WHERE SENDER_USERNAME = :username OR RECEIVER_USERNAME = :username")
-	public abstract List<ChatMessage> getChatMessageHistory(@Bind("username") String username);
+	@SqlQuery("SELECT * FROM TWSS_CHAT_MESSAGES WHERE SENDER_USERNAME = :username OR RECEIVER_USERNAME = :username ORDER BY CREATED DESC OFFSET :init ROWS FETCH NEXT :limit ROWS ONLY")
+	public abstract List<ChatMessage> getChatMessageHistory(@Bind("username") String username, @Bind("init") int init, @Bind("limit") int limit);
 
+	@SqlQuery("SELECT count(*) FROM TWSS_CHAT_MESSAGES WHERE SENDER_USERNAME = :username OR RECEIVER_USERNAME = :username")
+	public abstract Integer countChatMessageHistory(@Bind("username") String username);
+	
 	
 	// INSERTS--------------------------------------------------------------------------------------------------------------------------------------
 	

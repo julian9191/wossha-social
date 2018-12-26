@@ -6,9 +6,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
+import java.util.Map;
+
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 
@@ -38,11 +41,11 @@ public class SocialController extends ControllerWrapper {
 	}
 	
 	@GetMapping(value = "/message-history")
-	public @ResponseBody List<ChatMessage> getChatMessageHistory() {
+	public @ResponseBody Map<String, Object> getChatMessageHistory(@RequestParam("init") int init, @RequestParam("limit") int limit) {
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		String username = auth.getPrincipal().toString();
 		
-		List<ChatMessage> c = repo.getChatMessageHistory(username);
+		Map<String, Object> c = repo.getChatMessageHistory(username, init, limit);
 		return c;
 	}
 

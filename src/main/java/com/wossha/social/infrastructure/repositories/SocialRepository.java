@@ -1,12 +1,18 @@
 package com.wossha.social.infrastructure.repositories;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
 import org.skife.jdbi.v2.IDBI;
 import org.springframework.beans.factory.annotation.Autowired;
+
+import com.wossha.msbase.models.Pagination;
 import com.wossha.social.commands.followUser.model.FollowUser;
 import com.wossha.social.dto.FollowingUser;
 import com.wossha.social.infrastructure.dao.follow.SocialDao;
 import com.wossha.social.infrastructure.websocket.model.ChatMessage;
+import java.util.Collections;
 
 public class SocialRepository implements Repository<FollowUser> {
 
@@ -31,9 +37,18 @@ public class SocialRepository implements Repository<FollowUser> {
 		return socialDao.getFollowingUsers(username);
 	}
 	
-	public List<ChatMessage> getChatMessageHistory(String username) {
+	public Map<String, Object> getChatMessageHistory(String username, int init, int limit) {
 		socialDao = dbi.onDemand(SocialDao.class);
-		return socialDao.getChatMessageHistory(username);
+		
+		Integer count = socialDao.countChatMessageHistory(username);
+		List<ChatMessage> history = socialDao.getChatMessageHistory(username, init, limit);
+		Collections.reverse(history);
+		
+		Pagination pagination = new Pagination(count, init, limit);
+		Map<String, Object> resultMap = new HashMap<>();
+		resultMap.put("pagination", pagination);
+		resultMap.put("result", history);
+		return resultMap;
 	}
 	
 	public void stopFollowingUser(String username, String followingUserName) {
