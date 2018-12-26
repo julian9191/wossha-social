@@ -1,5 +1,7 @@
 package com.wossha.social.wsCommands.sendChatMessage;
 
+import java.util.Date;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.simp.SimpMessageSendingOperations;
 import org.springframework.stereotype.Component;
@@ -44,6 +46,7 @@ public class SendChatMessageWsCommand implements ICommand<SendChatMessage> {
 
 		repo.saveChatMessage(data.getMessage());
 		
+		data.getMessage().setSendOn(new Date());
 		messagingTemplate.convertAndSendToUser(data.getMessage().getToId(), WsDestinations.SEND_TO_USER_DEST.getValue(),
 				data.getMessage());
 

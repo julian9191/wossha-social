@@ -7,11 +7,13 @@ public class ChatMessage {
 	private String fromId;
 	private String toId;
 	private String message;
+	private Date sendOn;
 	
-	public ChatMessage(String fromId, String toId, String message) {
+	public ChatMessage(String fromId, String toId, String message, Date sendOn) {
 		this.fromId = fromId;
 		this.toId = toId;
 		this.message = message;
+		this.sendOn = sendOn;
 	}
 
 	public ChatMessage() {}
@@ -41,5 +43,12 @@ public class ChatMessage {
 		this.message = message;
 	}
 
+	public Date getSendOn() {
+		return sendOn;
+	}
+
+	public void setSendOn(Date sendOn) {
+		this.sendOn = sendOn;
+	}
 
 }

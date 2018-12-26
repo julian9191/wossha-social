@@ -14,7 +14,8 @@ public class ChatMessageMapperJdbi implements ResultSetMapper<ChatMessage> {
 		return new ChatMessage(
 				r.getString("SENDER_USERNAME"),
 				r.getString("RECEIVER_USERNAME"),
-				r.getString("MESSAGE")
+				r.getString("MESSAGE"),
+				r.getTimestamp("CREATED")
         );
         
     }
