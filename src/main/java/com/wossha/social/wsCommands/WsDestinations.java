@@ -1,7 +1,8 @@
 package com.wossha.social.wsCommands;
 
 public enum WsDestinations {
-	SEND_TO_USER_DEST("/queue/reply");
+	SEND_TO_USER_DEST("/queue/reply"),
+	PUBLIC_TOPIC("/topic/public");
 
     private final String valor;
 

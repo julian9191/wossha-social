@@ -10,6 +10,8 @@ import org.springframework.core.env.Environment;
 import org.springframework.jms.core.JmsTemplate;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
+import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
+import org.springframework.messaging.simp.SimpMessageSendingOperations;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -41,9 +43,12 @@ public class WsCommandProcessor extends ControllerWrapper{
     
     @Autowired
     JmsTemplate jmsTemplate;
+    
+    @Autowired
+    private SimpMessageSendingOperations messagingTemplate;
 
     @MessageMapping("/social.command")
-    public void processCommand(@Payload String json, Principal principal) {
+    public void processCommand(@Payload String json, SimpMessageHeaderAccessor headerAccessor, Principal principal) {
         try {
         	
         	JsonNode root = mapper.readTree(json);
@@ -52,10 +57,12 @@ public class WsCommandProcessor extends ControllerWrapper{
             ICommandSerializer cs = wsCommandSerializers.get(jCommand.asText());
             
             @SuppressWarnings("rawtypes")
-			ICommand command = cs.deserialize(json);
+            WSCommand command = (WSCommand) cs.deserialize(json);
 
     		String username = principal.toString();
             command.setUsername(username);
+            command.setHeaderAccessor(headerAccessor);
+            command.setMessagingTemplate(messagingTemplate);
             CommandResult result = command.execute();
             
             logger.debug("WS command generated: "+json);

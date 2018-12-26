@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 import org.springframework.stereotype.Service;
 import com.wossha.msbase.commands.ICommandSerializer;
+import com.wossha.social.wsCommands.connectUser.ConnectUserWsSerializer;
 import com.wossha.social.wsCommands.sendChatMessage.SendChatMessageWsSerializer;
 
 @Service
@@ -13,9 +14,11 @@ public class WsCommandSerializers {
     
     //serializers
     private SendChatMessageWsSerializer sendChatMessageWsSerializer;
+    private ConnectUserWsSerializer connectUserWsSerializer;
 
 	public void initMapper() {
         processors.put("SendChatMessage", sendChatMessageWsSerializer);
+        processors.put("ConnectUser", connectUserWsSerializer);
     }
 
     public ICommandSerializer get(String commandName) {
@@ -26,4 +29,7 @@ public class WsCommandSerializers {
 		this.sendChatMessageWsSerializer = sendChatMessageWsSerializer;
 	}
 
+	public void setConnectUserWsSerializer(ConnectUserWsSerializer connectUserWsSerializer) {
+		this.connectUserWsSerializer = connectUserWsSerializer;
+	}
 }
