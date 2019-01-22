@@ -16,8 +16,10 @@ import com.wossha.msbase.commands.CommandResult;
 import com.wossha.msbase.exceptions.BusinessException;
 import com.wossha.msbase.exceptions.TechnicalException;
 import com.wossha.social.WosshaSocialApplication;
+import com.wossha.social.dto.FollowingUser;
 import com.wossha.social.infrastructure.mapper.MapperDozer;
 import com.wossha.social.infrastructure.repositories.SocialRepository;
+import com.wossha.social.infrastructure.websocket.model.ConnectedUserMessage;
 import com.wossha.social.wsCommands.WSCommand;
 import com.wossha.social.wsCommands.WsDestinations;
 import com.wossha.social.wsCommands.connectUser.model.ConnectUser;
@@ -60,8 +62,14 @@ public class ConnectUserWsCommand extends WSCommand<ConnectUser> {
         Event userConnectedEvent = new UserConnectionEvent(WosshaSocialApplication.APP_NAME, data.getMessage().getSender(), message);
         result.addEvent(userConnectedEvent);
         
-        messagingTemplate.convertAndSend(WsDestinations.PUBLIC_TOPIC.getValue(), data.getMessage());
-
+        List<FollowingUser> followingUsers = repo.getFollowingUsers(data.getMessage().getSender());
+        
+        ConnectedUserMessage connectedUserMessage = new ConnectedUserMessage(data.getMessage().getSender());
+        for (FollowingUser followingUser : followingUsers) {
+        	messagingTemplate.convertAndSendToUser(followingUser.getUsername(), WsDestinations.SEND_TO_USER_DEST.getValue(),
+        			connectedUserMessage);
+		}
+        
 		return result;
 	}
 

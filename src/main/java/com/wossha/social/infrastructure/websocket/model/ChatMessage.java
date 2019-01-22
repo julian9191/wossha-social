@@ -4,6 +4,7 @@ import java.util.Date;
 
 public class ChatMessage {
 	
+	private String responseType = "CHAT-MESSAGE";
 	private String fromId;
 	private String toId;
 	private String message;
@@ -49,6 +50,14 @@ public class ChatMessage {
 
 	public void setSendOn(Date sendOn) {
 		this.sendOn = sendOn;
+	}
+
+	public String getResponseType() {
+		return responseType;
+	}
+
+	public void setResponseType(String responseType) {
+		this.responseType = responseType;
 	}
 
 }
