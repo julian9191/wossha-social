@@ -21,7 +21,12 @@ import com.wossha.json.events.events.api.Event;
 import com.wossha.json.events.events.social.userConnectedEvent.Message;
 import com.wossha.json.events.events.social.userConnectedEvent.UserConnectionEvent;
 import com.wossha.social.WosshaSocialApplication;
+import com.wossha.social.dto.FollowingUser;
+import com.wossha.social.infrastructure.repositories.SocialRepository;
 import com.wossha.social.infrastructure.websocket.model.ChatMessage;
+import com.wossha.social.infrastructure.websocket.model.ConnectedUserMessage;
+import com.wossha.social.infrastructure.websocket.model.DisconnectedUserMessage;
+import com.wossha.social.wsCommands.WsDestinations;
 
 @Component
 public class WebSocketEventListener {
@@ -36,6 +41,9 @@ public class WebSocketEventListener {
 	
 	@Autowired
 	private Environment env;
+	
+	@Autowired
+	private SocialRepository repo;
 
     @EventListener
     public void handleWebSocketConnectListener(SessionConnectedEvent event) {
@@ -50,8 +58,8 @@ public class WebSocketEventListener {
         if(username != null) {
             System.out.println("User Disconnected : " + username);
 
-            ChatMessage chatMessage = new ChatMessage();
-            chatMessage.setFromId(username);
+            /*ChatMessage chatMessage = new ChatMessage();
+            chatMessage.setFromId(username);*/
             
             Message message = new Message(username, 0);
             Event userConnectedEvent = new UserConnectionEvent(WosshaSocialApplication.APP_NAME, username, message);
@@ -65,8 +73,14 @@ public class WebSocketEventListener {
     		} catch (JsonProcessingException e) {
     			e.printStackTrace();
     		}
-
-            messagingTemplate.convertAndSend("/topic/public", chatMessage);
+            
+            List<FollowingUser> followingUsers = repo.getFollowingUsers(username);
+            
+            DisconnectedUserMessage disconnectedUserMessage = new DisconnectedUserMessage(username);
+            for (FollowingUser followingUser : followingUsers) {
+            	messagingTemplate.convertAndSendToUser(followingUser.getUsername(), WsDestinations.SEND_TO_USER_DEST.getValue(),
+            			disconnectedUserMessage);
+    		}
         }
     }
     

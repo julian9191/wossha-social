@@ -1,0 +1,28 @@
+package com.wossha.social.infrastructure.websocket.model;
+
+public class DisconnectedUserMessage {
+	
+	private String responseType = "DISCONNECTED-USER-MESSAGE";
+	private String username;
+	
+	public DisconnectedUserMessage(String username) {
+		this.username = username;
+	}
+
+	public String getResponseType() {
+		return responseType;
+	}
+
+	public void setResponseType(String responseType) {
+		this.responseType = responseType;
+	}
+
+	public String getUsername() {
+		return username;
+	}
+
+	public void setUsername(String username) {
+		this.username = username;
+	}
+
+}
