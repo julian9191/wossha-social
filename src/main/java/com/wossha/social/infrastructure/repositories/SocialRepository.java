@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import com.wossha.msbase.models.Pagination;
 import com.wossha.social.commands.followUser.model.FollowUser;
 import com.wossha.social.dto.FollowingUser;
+import com.wossha.social.dto.Notification;
 import com.wossha.social.infrastructure.dao.follow.SocialDao;
 import com.wossha.social.infrastructure.websocket.model.ChatMessage;
 import java.util.Collections;
@@ -25,6 +26,11 @@ public class SocialRepository implements Repository<FollowUser> {
 	public void add(FollowUser clothe) {
 		socialDao = dbi.onDemand(SocialDao.class);
 		socialDao.add(clothe);
+	}
+	
+	public void addFollowRequestNotification(Notification notificacion) {
+		socialDao = dbi.onDemand(SocialDao.class);
+		socialDao.addFollowRequestNotification(notificacion);
 	}
 
 	public FollowUser getFollowersRelationship(String senderUsername, String receiverUsername) {
@@ -51,6 +57,11 @@ public class SocialRepository implements Repository<FollowUser> {
 		return resultMap;
 	}
 	
+	public List<Notification> getUserNotifications(String username) {
+		socialDao = dbi.onDemand(SocialDao.class);
+		return socialDao.getUserNotifications(username);
+	}
+	
 	public void stopFollowingUser(String username, String followingUserName) {
 		socialDao = dbi.onDemand(SocialDao.class);
 		socialDao.stopFollowingUser(username, followingUserName);
@@ -70,5 +81,6 @@ public class SocialRepository implements Repository<FollowUser> {
 	public void remove(FollowUser clothe) {
 
 	}
+
 
 }

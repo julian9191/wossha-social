@@ -1,6 +1,6 @@
 package com.wossha.social.infrastructure.websocket.model;
 
-public class ConnectedUserMessage {
+public class ConnectedUserMessage implements IChatMessage{
 	
 	private String responseType = "CONNECTED-USER-MESSAGE";
 	private String username;

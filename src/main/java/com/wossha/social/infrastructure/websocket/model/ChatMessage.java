@@ -2,7 +2,7 @@ package com.wossha.social.infrastructure.websocket.model;
 
 import java.util.Date;
 
-public class ChatMessage {
+public class ChatMessage implements IChatMessage{
 	
 	private String responseType = "CHAT-MESSAGE";
 	private String fromId;

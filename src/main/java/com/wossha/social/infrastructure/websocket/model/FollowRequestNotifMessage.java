@@ -1,11 +1,13 @@
 package com.wossha.social.infrastructure.websocket.model;
 
-public class DisconnectedUserMessage implements IChatMessage{
+import java.util.Date;
+
+public class FollowRequestNotifMessage implements IChatMessage{
 	
-	private String responseType = "DISCONNECTED-USER-MESSAGE";
+	private String responseType = "FOLLOW-REQUEST-NOTIF";
 	private String username;
 	
-	public DisconnectedUserMessage(String username) {
+	public FollowRequestNotifMessage(String username) {
 		this.username = username;
 	}
 

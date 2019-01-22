@@ -10,6 +10,7 @@ import org.skife.jdbi.v2.sqlobject.customizers.RegisterMapper;
 import org.springframework.stereotype.Repository;
 import com.wossha.social.commands.followUser.model.FollowUser;
 import com.wossha.social.dto.FollowingUser;
+import com.wossha.social.dto.Notification;
 import com.wossha.social.infrastructure.websocket.model.ChatMessage;
 
 @Repository
@@ -35,6 +36,10 @@ public abstract  class SocialDao {
 	@SqlQuery("SELECT count(*) FROM TWSS_CHAT_MESSAGES WHERE SENDER_USERNAME = :username OR RECEIVER_USERNAME = :username")
 	public abstract Integer countChatMessageHistory(@Bind("username") String username);
 	
+	@RegisterMapper(NotificationMapperJdbi.class)
+	@SqlQuery("select * from TWSS_NOTIFICATIONS WHERE RECEIVER_USERNAME = :username")
+	public abstract List<Notification> getUserNotifications(@Bind("username") String username);
+
 	
 	// INSERTS--------------------------------------------------------------------------------------------------------------------------------------
 	
@@ -44,10 +49,12 @@ public abstract  class SocialDao {
 	@SqlUpdate("Insert into TWSS_CHAT_MESSAGES (SENDER_USERNAME,RECEIVER_USERNAME,MESSAGE,VIEWED) values (:message.fromId, :message.toId, :message.message, 1)")
 	public abstract void saveChatMessage(@BindBean("message") ChatMessage message);
 	
+	@SqlUpdate("Insert into TWSS_NOTIFICATIONS (TYPE,RECEIVER_USERNAME,SENDER_USERNAME,SENDER_NAME,MESSAGE,VIEWED,OPENED) values (:nt.type,:nt.receiverUserName,:nt.senderUserName,:nt.senderName,:nt.message,:nt.viewed,:nt.opend)")
+	public abstract void addFollowRequestNotification(@BindBean("nt") Notification notificacion);
 
 	// REMOVES--------------------------------------------------------------------------------------------------------------------------------------
 	
-	@SqlUpdate("DELETE FROM TWSS_CHAT_MESSAGES WHERE SENDER_USERNAME=:username AND RECEIVER_USERNAME=:followingUserName")
+	@SqlUpdate("DELETE FROM TWSS_FOLLOWERS WHERE SENDER_USERNAME=:username AND RECEIVER_USERNAME=:followingUserName")
 	public abstract void stopFollowingUser(@Bind("username") String username, @Bind("followingUserName") String followingUserName);
 	
 }

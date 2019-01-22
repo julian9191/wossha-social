@@ -11,14 +11,12 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 import java.util.Map;
-
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-
 import com.wossha.msbase.controllers.ControllerWrapper;
 import com.wossha.social.dto.FollowingUser;
+import com.wossha.social.dto.Notification;
 import com.wossha.social.infrastructure.repositories.SocialRepository;
-import com.wossha.social.infrastructure.websocket.model.ChatMessage;
 
 @CrossOrigin(origins = { "http://localhost:4200" })
 @RestController
@@ -48,5 +46,15 @@ public class SocialController extends ControllerWrapper {
 		Map<String, Object> c = repo.getChatMessageHistory(username, init, limit);
 		return c;
 	}
+	
+	@GetMapping(value = "/notifications")
+	public @ResponseBody List<Notification> getUserNotifications() {
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		String username = auth.getPrincipal().toString();
+		
+		List<Notification> c = repo.getUserNotifications(username);
+		return c;
+	}
+	
 
 }
