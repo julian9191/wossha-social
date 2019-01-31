@@ -10,6 +10,8 @@ import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.wossha.social.commands.CommandSerializers;
+import com.wossha.social.commands.acceptFollow.AcceptFollowCommand;
+import com.wossha.social.commands.acceptFollow.AcceptFollowSerializer;
 import com.wossha.social.commands.followUser.FollowUserCommand;
 import com.wossha.social.commands.followUser.FollowUserSerializer;
 import com.wossha.social.commands.stopFollowingUser.StopFollowingUserCommand;
@@ -37,6 +39,11 @@ public class BeansConfig {
 		return new StopFollowingUserCommand();
 	}
 	
+	@Bean
+	public AcceptFollowCommand acceptFollowCommand() {
+		return new AcceptFollowCommand();
+	}
+	
 	//serializers--------------------------------------------------
 	
 	@Bean
@@ -49,6 +56,11 @@ public class BeansConfig {
 		return new StopFollowingUserSerializer();
 	}
 	
+	@Bean
+	public AcceptFollowSerializer acceptFollowSerializer() {
+		return new AcceptFollowSerializer();
+	}
+	
 	
 	//--------------------------------------------------------------
 	
@@ -57,6 +69,7 @@ public class BeansConfig {
 		CommandSerializers cs = new CommandSerializers();
 		cs.setFollowUserSerializer(followUserSerializer());
 		cs.setStopFollowingUserSerializer(stopFollowingUserSerializer());
+		cs.setAcceptFollowSerializer(acceptFollowSerializer());
 		cs.initMapper();
 		return cs;
 	}

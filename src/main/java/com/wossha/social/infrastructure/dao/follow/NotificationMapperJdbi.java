@@ -17,7 +17,7 @@ public class NotificationMapperJdbi implements ResultSetMapper<Notification> {
 				r.getString("RECEIVER_USERNAME"),
 				r.getString("SENDER_USERNAME"),
 				r.getString("SENDER_NAME"),
-				r.getString("MESSAGE"),
+				r.getString("SENDER_PICTURE"),
 				r.getBoolean("VIEWED"),
 				r.getBoolean("OPENED"),
 				r.getTimestamp("CREATED")

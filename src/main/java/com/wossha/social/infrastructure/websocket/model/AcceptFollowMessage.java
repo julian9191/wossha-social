@@ -2,17 +2,27 @@ package com.wossha.social.infrastructure.websocket.model;
 
 import com.wossha.social.dto.Notification;
 
-public class FollowRequestNotifMessage implements IChatMessage{
-	
-	private String responseType = "FOLLOW-REQUEST-NOTIF";
+public class AcceptFollowMessage implements IChatMessage{
+
+	private String responseType = "ACCEPT-FOLLOW";
 	private String fromId;
 	private String toId;
 	private Notification message;
 	
-	public FollowRequestNotifMessage(String fromId, String toId, Notification message) {
+	public AcceptFollowMessage(String fromId, String toId, Notification message) {
 		this.fromId = fromId;
 		this.toId = toId;
 		this.message = message;
+	}
+
+	public AcceptFollowMessage() {}
+
+	public String getResponseType() {
+		return responseType;
+	}
+
+	public void setResponseType(String responseType) {
+		this.responseType = responseType;
 	}
 
 	public String getFromId() {
@@ -38,13 +48,5 @@ public class FollowRequestNotifMessage implements IChatMessage{
 	public void setMessage(Notification message) {
 		this.message = message;
 	}
-
-	public String getResponseType() {
-		return responseType;
-	}
-
-	public void setResponseType(String responseType) {
-		this.responseType = responseType;
-	}
-
+	
 }

@@ -18,6 +18,7 @@ import com.wossha.social.dto.Notification;
 import com.wossha.social.infrastructure.enums.NotificationsEnum;
 import com.wossha.social.infrastructure.mapper.MapperDozer;
 import com.wossha.social.infrastructure.repositories.SocialRepository;
+import com.wossha.social.infrastructure.websocket.model.AcceptFollowMessage;
 import com.wossha.social.infrastructure.websocket.model.FollowRequestNotifMessage;
 import com.wossha.social.wsCommands.WsDestinations;
 
@@ -26,10 +27,9 @@ public class FollowUserCommand implements ICommand<FollowUser> {
 
 	private FollowUser data;
 	private String username;
-	private MapperDozer map = new MapperDozer();
 	
 	@Autowired
-	private ApplicationContext context;
+    private SimpMessageSendingOperations messagingTemplate;
 
 	@Autowired
 	private SocialRepository repo;
@@ -52,9 +52,6 @@ public class FollowUserCommand implements ICommand<FollowUser> {
 	@Override
 	public CommandResult execute() throws BusinessException, TechnicalException {
 		CommandResult result = new CommandResult();
-
-		//SimpMessageSendingOperations messagingTemplate = context.getBean(SimpMessageSendingOperations.class);
-		//SimpMessageHeaderAccessor headerAccessor = context.getBean(SimpMessageHeaderAccessor.class);
 		
 		FollowUser followUser = repo.getFollowersRelationship(data.getSenderUsername(), data.getReceiverUsername());
 		
@@ -72,12 +69,12 @@ public class FollowUserCommand implements ICommand<FollowUser> {
 		repo.add(data);
 		result.setMessage("La solicitud para seguir al usuario "+data.getReceiverUsername()+" se ha enviado");
 		
-		Notification notificacion = createFollowRequestNotificationDto(username, data.getSenderName(), data.getReceiverUsername());
-		repo.addFollowRequestNotification(notificacion);
+		Notification notificacion = createFollowRequestNotificationDto(username, data.getSenderName(), data.getSenderPicture(), data.getReceiverUsername());
+		repo.addNotification(notificacion);
 
-		/*FollowRequestNotifMessage followRequestNotifMessage = new FollowRequestNotifMessage(data.getReceiverUsername());
+		FollowRequestNotifMessage followRequestNotifMessage = new FollowRequestNotifMessage(data.getSenderUsername(), username, notificacion);
 		messagingTemplate.convertAndSendToUser(data.getReceiverUsername(), WsDestinations.SEND_TO_USER_DEST.getValue(),
-				followRequestNotifMessage);*/
+				followRequestNotifMessage);
 
 		return result;
 	}
@@ -86,9 +83,8 @@ public class FollowUserCommand implements ICommand<FollowUser> {
 	
 
 
-	private Notification createFollowRequestNotificationDto(String senderUsername, String senderName, String receiverUsername) {
-		String message = "El usuario "+senderName+" ha solicitado seguirte";
-		Notification notificacion = new Notification(NotificationsEnum.FOLLOW_REQUEST.name(), receiverUsername, senderUsername, senderName, message, false, false, new Date());
+	private Notification createFollowRequestNotificationDto(String senderUsername, String senderName, String senderPicture, String receiverUsername) {
+		Notification notificacion = new Notification(NotificationsEnum.FOLLOW_REQUEST.name(), receiverUsername, senderUsername, senderName, senderPicture, false, false, new Date());
 		return notificacion;
 	}
 

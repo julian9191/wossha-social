@@ -28,9 +28,9 @@ public class SocialRepository implements Repository<FollowUser> {
 		socialDao.add(clothe);
 	}
 	
-	public void addFollowRequestNotification(Notification notificacion) {
+	public void addNotification(Notification notificacion) {
 		socialDao = dbi.onDemand(SocialDao.class);
-		socialDao.addFollowRequestNotification(notificacion);
+		socialDao.addNotification(notificacion);
 	}
 
 	public FollowUser getFollowersRelationship(String senderUsername, String receiverUsername) {
@@ -64,12 +64,22 @@ public class SocialRepository implements Repository<FollowUser> {
 	
 	public void stopFollowingUser(String username, String followingUserName) {
 		socialDao = dbi.onDemand(SocialDao.class);
-		socialDao.stopFollowingUser(username, followingUserName);
+		socialDao.removeFollowingUser(username, followingUserName);
 	}
 	
 	public void saveChatMessage(ChatMessage message) {
 		socialDao = dbi.onDemand(SocialDao.class);
 		socialDao.saveChatMessage(message);
+	}
+	
+	public void changeStateFollowUser(String senderUsername, String username, int state) {
+		socialDao = dbi.onDemand(SocialDao.class);
+		socialDao.changeStateFollowUser(senderUsername, username, state);
+	}
+	
+	public void deleteNotification(String senderUsername, String username, String notificationType) {
+		socialDao = dbi.onDemand(SocialDao.class);
+		socialDao.deleteNotification(senderUsername, username, notificationType);
 	}
 	
 	@Override
@@ -81,6 +91,5 @@ public class SocialRepository implements Repository<FollowUser> {
 	public void remove(FollowUser clothe) {
 
 	}
-
 
 }

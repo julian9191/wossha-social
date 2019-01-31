@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 import org.springframework.stereotype.Service;
 import com.wossha.msbase.commands.ICommandSerializer;
+import com.wossha.social.commands.acceptFollow.AcceptFollowSerializer;
 import com.wossha.social.commands.followUser.FollowUserSerializer;
 import com.wossha.social.commands.stopFollowingUser.StopFollowingUserSerializer;
 
@@ -15,10 +16,12 @@ public class CommandSerializers {
     //serializers
     private FollowUserSerializer followUserSerializer;
     private StopFollowingUserSerializer stopFollowingUserSerializer;
+    private AcceptFollowSerializer acceptFollowSerializer;
 
 	public void initMapper() {
         processors.put("FollowUser", followUserSerializer);
         processors.put("StopFollowingUser", stopFollowingUserSerializer);
+        processors.put("AcceptFollow", acceptFollowSerializer);
     }
 
     public ICommandSerializer get(String commandName) {
@@ -31,6 +34,10 @@ public class CommandSerializers {
 
 	public void setStopFollowingUserSerializer(StopFollowingUserSerializer stopFollowingUserSerializer) {
 		this.stopFollowingUserSerializer = stopFollowingUserSerializer;
+	}
+
+	public void setAcceptFollowSerializer(AcceptFollowSerializer acceptFollowSerializer) {
+		this.acceptFollowSerializer = acceptFollowSerializer;
 	}
     
 }

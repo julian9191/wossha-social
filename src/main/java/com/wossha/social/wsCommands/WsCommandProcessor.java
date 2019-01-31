@@ -12,8 +12,6 @@ import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
 import org.springframework.messaging.simp.SimpMessageSendingOperations;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -22,7 +20,6 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.wossha.json.events.events.api.Event;
 import com.wossha.msbase.commands.CommandResult;
-import com.wossha.msbase.commands.ICommand;
 import com.wossha.msbase.commands.ICommandSerializer;
 import com.wossha.msbase.controllers.ControllerWrapper;
 import com.wossha.msbase.exceptions.BusinessException;

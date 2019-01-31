@@ -11,11 +11,11 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 import java.util.Map;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import com.wossha.msbase.controllers.ControllerWrapper;
 import com.wossha.social.dto.FollowingUser;
 import com.wossha.social.dto.Notification;
+import com.wossha.social.infrastructure.filters.UsernameInfoAuthenticationToken;
 import com.wossha.social.infrastructure.repositories.SocialRepository;
 
 @CrossOrigin(origins = { "http://localhost:4200" })
@@ -31,7 +31,7 @@ public class SocialController extends ControllerWrapper {
 
 	@GetMapping(value = "/following-users")
 	public @ResponseBody List<FollowingUser> getFollowingUsers() {
-		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		UsernameInfoAuthenticationToken auth = (UsernameInfoAuthenticationToken) SecurityContextHolder.getContext().getAuthentication();
 		String username = auth.getPrincipal().toString();
 		
 		List<FollowingUser> c = repo.getFollowingUsers(username);
@@ -40,7 +40,7 @@ public class SocialController extends ControllerWrapper {
 	
 	@GetMapping(value = "/message-history")
 	public @ResponseBody Map<String, Object> getChatMessageHistory(@RequestParam("init") int init, @RequestParam("limit") int limit) {
-		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		UsernameInfoAuthenticationToken auth = (UsernameInfoAuthenticationToken) SecurityContextHolder.getContext().getAuthentication();
 		String username = auth.getPrincipal().toString();
 		
 		Map<String, Object> c = repo.getChatMessageHistory(username, init, limit);
@@ -49,7 +49,7 @@ public class SocialController extends ControllerWrapper {
 	
 	@GetMapping(value = "/notifications")
 	public @ResponseBody List<Notification> getUserNotifications() {
-		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		UsernameInfoAuthenticationToken auth = (UsernameInfoAuthenticationToken) SecurityContextHolder.getContext().getAuthentication();
 		String username = auth.getPrincipal().toString();
 		
 		List<Notification> c = repo.getUserNotifications(username);

@@ -5,10 +5,11 @@ public class FollowUser {
 	private String uuid;
 	private String senderUsername;
 	private String senderName;
+	private String senderPicture;
 	private String receiverUsername;
 	private Integer state;
 
-	public FollowUser(String username, String uuid, String senderUsername, String senderName, String receiverUsername, Integer state) {
+	public FollowUser(String username, String uuid, String senderUsername, String senderName, String senderPicture, String receiverUsername, Integer state) {
 		this.username = username;
 		this.uuid = uuid;
 		this.senderUsername = senderUsername;
@@ -73,6 +74,14 @@ public class FollowUser {
 
 	public void setSenderName(String senderName) {
 		this.senderName = senderName;
+	}
+
+	public String getSenderPicture() {
+		return senderPicture;
+	}
+
+	public void setSenderPicture(String senderPicture) {
+		this.senderPicture = senderPicture;
 	}
 
 }

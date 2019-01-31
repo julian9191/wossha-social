@@ -49,12 +49,20 @@ public abstract  class SocialDao {
 	@SqlUpdate("Insert into TWSS_CHAT_MESSAGES (SENDER_USERNAME,RECEIVER_USERNAME,MESSAGE,VIEWED) values (:message.fromId, :message.toId, :message.message, 1)")
 	public abstract void saveChatMessage(@BindBean("message") ChatMessage message);
 	
-	@SqlUpdate("Insert into TWSS_NOTIFICATIONS (TYPE,RECEIVER_USERNAME,SENDER_USERNAME,SENDER_NAME,MESSAGE,VIEWED,OPENED) values (:nt.type,:nt.receiverUserName,:nt.senderUserName,:nt.senderName,:nt.message,:nt.viewed,:nt.opend)")
-	public abstract void addFollowRequestNotification(@BindBean("nt") Notification notificacion);
+	@SqlUpdate("Insert into TWSS_NOTIFICATIONS (TYPE,RECEIVER_USERNAME,SENDER_USERNAME,SENDER_NAME,SENDER_PICTURE,VIEWED,OPENED) values (:nt.type,:nt.receiverUserName,:nt.senderUserName,:nt.senderName,:nt.senderPicture,:nt.viewed,:nt.opend)")
+	public abstract void addNotification(@BindBean("nt") Notification notificacion);
+	
+	// UPDATES--------------------------------------------------------------------------------------------------------------------------------------
 
+	@SqlUpdate("UPDATE TWSS_FOLLOWERS SET STATE = :state WHERE SENDER_USERNAME=:senderUsername AND RECEIVER_USERNAME=:username")
+	public abstract void changeStateFollowUser(@Bind("senderUsername") String senderUsername, @Bind("username") String username, @Bind("state") int state);
+	
 	// REMOVES--------------------------------------------------------------------------------------------------------------------------------------
 	
 	@SqlUpdate("DELETE FROM TWSS_FOLLOWERS WHERE SENDER_USERNAME=:username AND RECEIVER_USERNAME=:followingUserName")
-	public abstract void stopFollowingUser(@Bind("username") String username, @Bind("followingUserName") String followingUserName);
+	public abstract void removeFollowingUser(@Bind("username") String username, @Bind("followingUserName") String followingUserName);
+	
+	@SqlUpdate("DELETE FROM TWSS_NOTIFICATIONS WHERE SENDER_USERNAME=:senderUsername AND RECEIVER_USERNAME=:username AND TYPE=:notificationType")
+	public abstract void deleteNotification(@Bind("senderUsername") String senderUsername, @Bind("username") String username, @Bind("notificationType") String notificationType);
 	
 }

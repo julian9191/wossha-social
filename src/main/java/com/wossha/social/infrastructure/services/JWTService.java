@@ -27,6 +27,9 @@ public static final String SECRET = Base64Utils.encodeToString("Alguna.Clave.Sec
 	public static final String TOKEN_PREFIX = "Bearer ";
 	public static final String HEADER_STRING = "Authorization";
 	public static final String PARAM_STRING = "token";
+	public static final String FIRST_NAME_PARAM = "firstName";
+	public static final String LAST_NAME_PARAM = "lastName";
+	public static final String PROFILE_PICTURE_PARAM = "profilePicture";
 	
 	public String create(Authentication auth) throws IOException {
 
@@ -67,9 +70,13 @@ public static final String SECRET = Base64Utils.encodeToString("Alguna.Clave.Sec
 
 	
 	public String getUsername(String token) {
-		// TODO Auto-generated method stub
 		return getClaims(token).getSubject();
 	}
+	
+	public String getClaim(String token, String key) {
+		return (String) getClaims(token).get(key);
+	}
+	
 
 	
 	public Collection<? extends GrantedAuthority> getRoles(String token) throws IOException {
