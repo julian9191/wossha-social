@@ -12,8 +12,12 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.wossha.social.commands.CommandSerializers;
 import com.wossha.social.commands.acceptFollow.AcceptFollowCommand;
 import com.wossha.social.commands.acceptFollow.AcceptFollowSerializer;
+import com.wossha.social.commands.changeNotifToViewed.ChangeNotifToViewedCommand;
+import com.wossha.social.commands.changeNotifToViewed.ChangeNotifToViewedSerializer;
 import com.wossha.social.commands.followUser.FollowUserCommand;
 import com.wossha.social.commands.followUser.FollowUserSerializer;
+import com.wossha.social.commands.refuseFollow.RefuseFollowCommand;
+import com.wossha.social.commands.refuseFollow.RefuseFollowSerializer;
 import com.wossha.social.commands.stopFollowingUser.StopFollowingUserCommand;
 import com.wossha.social.commands.stopFollowingUser.StopFollowingUserSerializer;
 import com.wossha.social.infrastructure.repositories.SocialRepository;
@@ -44,6 +48,16 @@ public class BeansConfig {
 		return new AcceptFollowCommand();
 	}
 	
+	@Bean
+	public ChangeNotifToViewedCommand changeNotifToViewedCommand() {
+		return new ChangeNotifToViewedCommand();
+	}
+	
+	@Bean
+	public RefuseFollowCommand refuseFollowCommand() {
+		return new RefuseFollowCommand();
+	}
+	
 	//serializers--------------------------------------------------
 	
 	@Bean
@@ -61,6 +75,16 @@ public class BeansConfig {
 		return new AcceptFollowSerializer();
 	}
 	
+	@Bean
+	public ChangeNotifToViewedSerializer changeNotifToViewedSerializer() {
+		return new ChangeNotifToViewedSerializer();
+	}
+	
+	@Bean
+	public RefuseFollowSerializer refuseFollowSerializer() {
+		return new RefuseFollowSerializer();
+	}
+	
 	
 	//--------------------------------------------------------------
 	
@@ -70,6 +94,8 @@ public class BeansConfig {
 		cs.setFollowUserSerializer(followUserSerializer());
 		cs.setStopFollowingUserSerializer(stopFollowingUserSerializer());
 		cs.setAcceptFollowSerializer(acceptFollowSerializer());
+		cs.setChangeNotifToViewedSerializer(changeNotifToViewedSerializer());
+		cs.setRefuseFollowSerializer(refuseFollowSerializer());
 		cs.initMapper();
 		return cs;
 	}

@@ -82,6 +82,11 @@ public class SocialRepository implements Repository<FollowUser> {
 		socialDao.deleteNotification(senderUsername, username, notificationType);
 	}
 	
+	public void changeNotifToViewed(String username, List<String> ids) {
+		socialDao = dbi.onDemand(SocialDao.class);
+		socialDao.changeNotifToViewed(dbi, username, ids);
+	}
+	
 	@Override
 	public void update(FollowUser clothe) {
 

@@ -1,13 +1,21 @@
 package com.wossha.social.infrastructure.dao.follow;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
+import org.skife.jdbi.v2.Handle;
+import org.skife.jdbi.v2.IDBI;
+import org.skife.jdbi.v2.Query;
+import org.skife.jdbi.v2.Update;
 import org.skife.jdbi.v2.sqlobject.Bind;
 import org.skife.jdbi.v2.sqlobject.BindBean;
 import org.skife.jdbi.v2.sqlobject.SqlQuery;
 import org.skife.jdbi.v2.sqlobject.SqlUpdate;
 import org.skife.jdbi.v2.sqlobject.customizers.RegisterMapper;
 import org.springframework.stereotype.Repository;
+
+import com.wossha.social.infrastructure.dao.BaseDao;
 import com.wossha.social.commands.followUser.model.FollowUser;
 import com.wossha.social.dto.FollowingUser;
 import com.wossha.social.dto.Notification;
@@ -56,6 +64,27 @@ public abstract  class SocialDao {
 
 	@SqlUpdate("UPDATE TWSS_FOLLOWERS SET STATE = :state WHERE SENDER_USERNAME=:senderUsername AND RECEIVER_USERNAME=:username")
 	public abstract void changeStateFollowUser(@Bind("senderUsername") String senderUsername, @Bind("username") String username, @Bind("state") int state);
+	
+
+	public void changeNotifToViewed(IDBI dbi, String username, List<String> ids) {
+
+		BaseDao baseDao = new BaseDao<>();
+		String query = "UPDATE TWSS_NOTIFICATIONS ";
+		query += "SET VIEWED = 1 ";
+		query += "WHERE RECEIVER_USERNAME = :username ";
+		query += !ids.isEmpty() ? "AND ID IN (<ids>) " : " ";
+
+		Map<String, List<String>> typesBindMap = new HashMap<>();
+		typesBindMap.put("ids", ids);
+		query = baseDao.generateBingIdentifier(query, typesBindMap);
+
+		Handle h = dbi.open();	
+		Update q = h.createStatement(query)
+		.bind("username", username);
+
+		q = baseDao.addInClauseBindUpdate(q, typesBindMap);
+		q.execute();
+	}
 	
 	// REMOVES--------------------------------------------------------------------------------------------------------------------------------------
 	
