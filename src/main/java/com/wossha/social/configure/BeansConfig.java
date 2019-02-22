@@ -14,6 +14,8 @@ import com.wossha.social.commands.acceptFollow.AcceptFollowCommand;
 import com.wossha.social.commands.acceptFollow.AcceptFollowSerializer;
 import com.wossha.social.commands.changeNotifToViewed.ChangeNotifToViewedCommand;
 import com.wossha.social.commands.changeNotifToViewed.ChangeNotifToViewedSerializer;
+import com.wossha.social.commands.createPost.CreatePostCommand;
+import com.wossha.social.commands.createPost.CreatePostSerializer;
 import com.wossha.social.commands.followUser.FollowUserCommand;
 import com.wossha.social.commands.followUser.FollowUserSerializer;
 import com.wossha.social.commands.refuseFollow.RefuseFollowCommand;
@@ -58,6 +60,11 @@ public class BeansConfig {
 		return new RefuseFollowCommand();
 	}
 	
+	@Bean
+	public CreatePostCommand createPostCommand() {
+		return new CreatePostCommand();
+	}
+	
 	//serializers--------------------------------------------------
 	
 	@Bean
@@ -85,6 +92,11 @@ public class BeansConfig {
 		return new RefuseFollowSerializer();
 	}
 	
+	@Bean
+	public CreatePostSerializer createPostSerializer() {
+		return new CreatePostSerializer();
+	}
+	
 	
 	//--------------------------------------------------------------
 	
@@ -96,6 +108,7 @@ public class BeansConfig {
 		cs.setAcceptFollowSerializer(acceptFollowSerializer());
 		cs.setChangeNotifToViewedSerializer(changeNotifToViewedSerializer());
 		cs.setRefuseFollowSerializer(refuseFollowSerializer());
+		cs.setCreatePostSerializer(createPostSerializer());
 		cs.initMapper();
 		return cs;
 	}

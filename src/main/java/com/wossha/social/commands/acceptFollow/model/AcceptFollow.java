@@ -4,7 +4,7 @@ import com.wossha.social.infrastructure.enums.NotificationsEnum;
 
 public class AcceptFollow {
 	
-	private String notificationType = NotificationsEnum.FOLLOW_REQUEST.name();;
+	private String notificationType = NotificationsEnum.FOLLOW_REQUEST.name();
 	private String username;
 	private String senderUsername;
 	

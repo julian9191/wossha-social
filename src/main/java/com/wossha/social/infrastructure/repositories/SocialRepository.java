@@ -11,6 +11,7 @@ import com.wossha.msbase.models.Pagination;
 import com.wossha.social.commands.followUser.model.FollowUser;
 import com.wossha.social.dto.FollowingUser;
 import com.wossha.social.dto.Notification;
+import com.wossha.social.dto.post.Post;
 import com.wossha.social.infrastructure.dao.follow.SocialDao;
 import com.wossha.social.infrastructure.websocket.model.ChatMessage;
 import java.util.Collections;
@@ -31,6 +32,11 @@ public class SocialRepository implements Repository<FollowUser> {
 	public void addNotification(Notification notificacion) {
 		socialDao = dbi.onDemand(SocialDao.class);
 		socialDao.addNotification(notificacion);
+	}
+	
+	public void addPost(Post post) {
+		socialDao = dbi.onDemand(SocialDao.class);
+		socialDao.addPost(post);
 	}
 
 	public FollowUser getFollowersRelationship(String senderUsername, String receiverUsername) {

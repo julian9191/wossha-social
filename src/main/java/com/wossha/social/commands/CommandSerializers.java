@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import com.wossha.msbase.commands.ICommandSerializer;
 import com.wossha.social.commands.acceptFollow.AcceptFollowSerializer;
 import com.wossha.social.commands.changeNotifToViewed.ChangeNotifToViewedSerializer;
+import com.wossha.social.commands.createPost.CreatePostSerializer;
 import com.wossha.social.commands.followUser.FollowUserSerializer;
 import com.wossha.social.commands.refuseFollow.RefuseFollowSerializer;
 import com.wossha.social.commands.stopFollowingUser.StopFollowingUserSerializer;
@@ -21,6 +22,7 @@ public class CommandSerializers {
     private AcceptFollowSerializer acceptFollowSerializer;
     private ChangeNotifToViewedSerializer changeNotifToViewedSerializer;
     private RefuseFollowSerializer refuseFollowSerializer;
+    private CreatePostSerializer createPostSerializer;
 
 	public void initMapper() {
         processors.put("FollowUser", followUserSerializer);
@@ -28,6 +30,7 @@ public class CommandSerializers {
         processors.put("AcceptFollow", acceptFollowSerializer);
         processors.put("ChangeNotifToViewed", changeNotifToViewedSerializer);
         processors.put("RefuseFollow", refuseFollowSerializer);
+        processors.put("CreatePost", createPostSerializer);
 	}
 
     public ICommandSerializer get(String commandName) {
@@ -53,5 +56,9 @@ public class CommandSerializers {
 	public void setRefuseFollowSerializer(RefuseFollowSerializer refuseFollowSerializer) {
 		this.refuseFollowSerializer = refuseFollowSerializer;
 	}
-    
+
+	public void setCreatePostSerializer(CreatePostSerializer createPostSerializer) {
+		this.createPostSerializer = createPostSerializer;
+	}
+	
 }

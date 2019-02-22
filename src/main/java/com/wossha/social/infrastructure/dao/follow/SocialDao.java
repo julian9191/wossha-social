@@ -19,6 +19,7 @@ import com.wossha.social.infrastructure.dao.BaseDao;
 import com.wossha.social.commands.followUser.model.FollowUser;
 import com.wossha.social.dto.FollowingUser;
 import com.wossha.social.dto.Notification;
+import com.wossha.social.dto.post.Post;
 import com.wossha.social.infrastructure.websocket.model.ChatMessage;
 
 @Repository
@@ -59,6 +60,9 @@ public abstract  class SocialDao {
 	
 	@SqlUpdate("Insert into TWSS_NOTIFICATIONS (TYPE,RECEIVER_USERNAME,SENDER_USERNAME,SENDER_NAME,SENDER_PICTURE,VIEWED,OPENED) values (:nt.type,:nt.receiverUserName,:nt.senderUserName,:nt.senderName,:nt.senderPicture,:nt.viewed,:nt.opend)")
 	public abstract void addNotification(@BindBean("nt") Notification notificacion);
+	
+	@SqlUpdate("Insert into TWSS_POSTS (UUID,TYPE,USERNAME,TEXT,UUID_PARENT) values (:post.uuid, :post.type, :post.username, :post.text, :post.uuidParent)")
+	public abstract void addPost(@BindBean("post") Post post);
 	
 	// UPDATES--------------------------------------------------------------------------------------------------------------------------------------
 
