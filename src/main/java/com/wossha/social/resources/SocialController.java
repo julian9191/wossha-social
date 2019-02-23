@@ -56,5 +56,13 @@ public class SocialController extends ControllerWrapper {
 		return c;
 	}
 	
+	@GetMapping(value = "/posts")
+	public @ResponseBody Map<String, Object> getPosts(@RequestParam("init") int init, @RequestParam("limit") int limit) {
+		UsernameInfoAuthenticationToken auth = (UsernameInfoAuthenticationToken) SecurityContextHolder.getContext().getAuthentication();
+		String username = auth.getPrincipal().toString();
+		
+		Map<String, Object> c = repo.getPosts(username, init, limit);
+		return c;
+	}
 
 }

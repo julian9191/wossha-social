@@ -49,6 +49,12 @@ public abstract  class SocialDao {
 	@SqlQuery("select * from TWSS_NOTIFICATIONS WHERE RECEIVER_USERNAME = :username")
 	public abstract List<Notification> getUserNotifications(@Bind("username") String username);
 
+	@SqlQuery("SELECT count(*) FROM TWSS_POSTS")
+	public abstract Integer countPosts(@Bind("username") String username);
+	
+	@RegisterMapper(PostMapperJdbi.class)
+	@SqlQuery("SELECT * FROM TWSS_POSTS ORDER BY CREATED DESC OFFSET :init ROWS FETCH NEXT :limit ROWS ONLY")
+	public abstract List<Post> getPosts(@Bind("username") String username, @Bind("init") int init, @Bind("limit") int limit);
 	
 	// INSERTS--------------------------------------------------------------------------------------------------------------------------------------
 	

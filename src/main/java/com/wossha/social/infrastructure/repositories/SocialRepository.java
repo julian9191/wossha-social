@@ -63,6 +63,20 @@ public class SocialRepository implements Repository<FollowUser> {
 		return resultMap;
 	}
 	
+	public Map<String, Object> getPosts(String username, int init, int limit) {
+		socialDao = dbi.onDemand(SocialDao.class);
+		
+		Integer count = socialDao.countPosts(username);
+		List<Post> history = socialDao.getPosts(username, init, limit);
+		//Collections.reverse(history);
+		
+		Pagination pagination = new Pagination(count, init, limit);
+		Map<String, Object> resultMap = new HashMap<>();
+		resultMap.put("pagination", pagination);
+		resultMap.put("result", history);
+		return resultMap;
+	}
+	
 	public List<Notification> getUserNotifications(String username) {
 		socialDao = dbi.onDemand(SocialDao.class);
 		return socialDao.getUserNotifications(username);
