@@ -13,16 +13,16 @@ public class Post {
 	private String text;
 	private String uuidParent;
 	
-	//Formats output date when this DTO is passed through JSON
-	@JsonFormat(pattern = "yyyy-MM-dd")
-	// Allows yyyy-MM-dd date to be passed into GET request in JSON
-	@DateTimeFormat(pattern = "yyyy-MM-dd")
+	// Formats output date when this DTO is passed through JSON
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
+    // Allows yyyy-MM-dd date to be passed into GET request in JSON
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm")
 	private Timestamp created;
 
-	//Formats output date when this DTO is passed through JSON
-	@JsonFormat(pattern = "yyyy-MM-dd")
-	//Allows yyyy-MM-dd date to be passed into GET request in JSON
-	@DateTimeFormat(pattern = "yyyy-MM-dd")
+    // Formats output date when this DTO is passed through JSON
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
+    // Allows yyyy-MM-dd date to be passed into GET request in JSON
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm")
 	private Timestamp modified;
 
 	public Post(Integer id, String uuid, String type, String username, String text, String uuidParent,

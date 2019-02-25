@@ -14,6 +14,8 @@ import com.wossha.social.dto.Notification;
 import com.wossha.social.dto.post.Post;
 import com.wossha.social.infrastructure.dao.follow.SocialDao;
 import com.wossha.social.infrastructure.websocket.model.ChatMessage;
+
+import java.util.ArrayList;
 import java.util.Collections;
 
 public class SocialRepository implements Repository<FollowUser> {
@@ -63,12 +65,20 @@ public class SocialRepository implements Repository<FollowUser> {
 		return resultMap;
 	}
 	
-	public Map<String, Object> getPosts(String username, int init, int limit) {
+	public Map<String, Object> getPosts(String username, int init, int limit, String profileUsername) {
 		socialDao = dbi.onDemand(SocialDao.class);
 		
-		Integer count = socialDao.countPosts(username);
-		List<Post> history = socialDao.getPosts(username, init, limit);
-		//Collections.reverse(history);
+		Integer count = 0;
+		List<Post> history = new ArrayList<>();
+		
+		if(profileUsername!=null && !profileUsername.equals("")) {
+			count = socialDao.countMyPosts(profileUsername);
+			history = socialDao.getMyPosts(profileUsername, init, limit);
+		}else {
+			count = socialDao.countPosts(username);
+			history = socialDao.getPosts(username, init, limit);
+		}
+		
 		
 		Pagination pagination = new Pagination(count, init, limit);
 		Map<String, Object> resultMap = new HashMap<>();

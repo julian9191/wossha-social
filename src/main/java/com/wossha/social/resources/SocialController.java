@@ -57,11 +57,11 @@ public class SocialController extends ControllerWrapper {
 	}
 	
 	@GetMapping(value = "/posts")
-	public @ResponseBody Map<String, Object> getPosts(@RequestParam("init") int init, @RequestParam("limit") int limit) {
+	public @ResponseBody Map<String, Object> getPosts(@RequestParam("init") int init, @RequestParam("limit") int limit, @RequestParam("username") String profileUsername) {
 		UsernameInfoAuthenticationToken auth = (UsernameInfoAuthenticationToken) SecurityContextHolder.getContext().getAuthentication();
 		String username = auth.getPrincipal().toString();
 		
-		Map<String, Object> c = repo.getPosts(username, init, limit);
+		Map<String, Object> c = repo.getPosts(username, init, limit, profileUsername);
 		return c;
 	}
 
