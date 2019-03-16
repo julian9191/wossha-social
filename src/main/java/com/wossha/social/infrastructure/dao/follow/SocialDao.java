@@ -3,10 +3,8 @@ package com.wossha.social.infrastructure.dao.follow;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
 import org.skife.jdbi.v2.Handle;
 import org.skife.jdbi.v2.IDBI;
-import org.skife.jdbi.v2.Query;
 import org.skife.jdbi.v2.Update;
 import org.skife.jdbi.v2.sqlobject.Bind;
 import org.skife.jdbi.v2.sqlobject.BindBean;
@@ -14,12 +12,12 @@ import org.skife.jdbi.v2.sqlobject.SqlQuery;
 import org.skife.jdbi.v2.sqlobject.SqlUpdate;
 import org.skife.jdbi.v2.sqlobject.customizers.RegisterMapper;
 import org.springframework.stereotype.Repository;
-
 import com.wossha.social.infrastructure.dao.BaseDao;
 import com.wossha.social.commands.followUser.model.FollowUser;
 import com.wossha.social.dto.FollowingUser;
 import com.wossha.social.dto.Notification;
 import com.wossha.social.dto.post.Post;
+import com.wossha.social.dto.post.Reaction;
 import com.wossha.social.infrastructure.websocket.model.ChatMessage;
 
 @Repository
@@ -63,6 +61,19 @@ public abstract  class SocialDao {
 	@SqlQuery("SELECT * FROM TWSS_POSTS ORDER BY CREATED DESC OFFSET :init ROWS FETCH NEXT :limit ROWS ONLY")
 	public abstract List<Post> getPosts(@Bind("username") String username, @Bind("init") int init, @Bind("limit") int limit);
 	
+	@RegisterMapper(ReactionMapperJdbi.class)
+	@SqlQuery("SELECT * FROM TWSS_REACTIONS WHERE USERNAME=:username AND UUID_POST=:uuidPost AND TYPE=:reactionType")
+	public abstract Reaction getReactionByType(@Bind("username") String username, @Bind("uuidPost") String uuidPost, @Bind("reactionType") String reactionType);
+	
+	@RegisterMapper(ReactionMapperJdbi.class)
+	@SqlQuery("SELECT * FROM TWSS_REACTIONS WHERE USERNAME=:username AND UUID_POST=:uuidPost")
+	public abstract Reaction getReaction(@Bind("username") String username, @Bind("uuidPost") String uuidPost);
+	
+	@RegisterMapper(ReactionMapperJdbi.class)
+	@SqlQuery("SELECT * FROM TWSS_REACTIONS WHERE UUID_POST=:uuidPost")
+	public abstract List<Reaction> getReactions(@Bind("uuidPost") String uuidPost);
+
+	
 	// INSERTS--------------------------------------------------------------------------------------------------------------------------------------
 	
 	@SqlUpdate("Insert into TWSS_FOLLOWERS (UUID,SENDER_USERNAME,RECEIVER_USERNAME,STATE) values (:followUser.uuid, :followUser.senderUsername, :followUser.receiverUsername, :followUser.state)")
@@ -77,12 +88,17 @@ public abstract  class SocialDao {
 	@SqlUpdate("Insert into TWSS_POSTS (UUID,TYPE,USERNAME,TEXT,UUID_PARENT) values (:post.uuid, :post.type, :post.username, :post.text, :post.uuidParent)")
 	public abstract void addPost(@BindBean("post") Post post);
 	
+	@SqlUpdate("Insert into TWSS_REACTIONS (UUID,TYPE,UUID_POST,USERNAME) values (:reaction.uuid, :reaction.type, :reaction.uuidPost, :reaction.username)")
+	public abstract void addReaction(@BindBean("reaction") Reaction reaction);
+	
 	// UPDATES--------------------------------------------------------------------------------------------------------------------------------------
 
 	@SqlUpdate("UPDATE TWSS_FOLLOWERS SET STATE = :state WHERE SENDER_USERNAME=:senderUsername AND RECEIVER_USERNAME=:username")
 	public abstract void changeStateFollowUser(@Bind("senderUsername") String senderUsername, @Bind("username") String username, @Bind("state") int state);
 	
-
+	@SqlUpdate("UPDATE TWSS_REACTIONS SET TYPE = :reactionType WHERE USERNAME=:username AND UUID_POST=:uuidPost")
+	public abstract void updateReactionType(@Bind("username") String username, @Bind("uuidPost") String uuidPost, @Bind("reactionType") String reactionType);
+	
 	public void changeNotifToViewed(IDBI dbi, String username, List<String> ids) {
 
 		BaseDao baseDao = new BaseDao<>();
@@ -110,5 +126,8 @@ public abstract  class SocialDao {
 	
 	@SqlUpdate("DELETE FROM TWSS_NOTIFICATIONS WHERE SENDER_USERNAME=:senderUsername AND RECEIVER_USERNAME=:username AND TYPE=:notificationType")
 	public abstract void deleteNotification(@Bind("senderUsername") String senderUsername, @Bind("username") String username, @Bind("notificationType") String notificationType);
+	
+	@SqlUpdate("DELETE FROM TWSS_REACTIONS WHERE USERNAME=:username AND UUID_POST=:uuidPost AND TYPE=:reactionType")
+	public abstract void removeReaction(@Bind("username") String username, @Bind("uuidPost") String uuidPost, @Bind("reactionType") String reactionType);
 	
 }

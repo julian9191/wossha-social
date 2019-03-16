@@ -2,25 +2,22 @@ package com.wossha.social.infrastructure.dao.follow;
 
 import org.skife.jdbi.v2.StatementContext;
 import org.skife.jdbi.v2.tweak.ResultSetMapper;
-
-import com.wossha.social.dto.post.Post;
+import com.wossha.social.dto.post.Reaction;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public class PostMapperJdbi implements ResultSetMapper<Post> {
+public class ReactionMapperJdbi implements ResultSetMapper<Reaction> {
 	
     @Override
-    public Post map(int index, ResultSet r, StatementContext ctx) throws SQLException {
-
-		return new Post(
+    public Reaction map(int index, ResultSet r, StatementContext ctx) throws SQLException {
+           	
+		return new Reaction(
 				r.getInt("ID"),
 				r.getString("UUID"),
 				r.getString("TYPE"),
+				r.getString("UUID_POST"),
 				r.getString("USERNAME"),
-				r.getString("TEXT"),
-				r.getString("UUID_PARENT"),
-				r.getTimestamp("CREATED"),
-				r.getTimestamp("MODIFIED")
+				r.getTimestamp("CREATED")
         );
         
     }

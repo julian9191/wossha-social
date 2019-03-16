@@ -1,6 +1,8 @@
 package com.wossha.social.dto.post;
 
 import java.sql.Timestamp;
+import java.util.List;
+
 import org.springframework.format.annotation.DateTimeFormat;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
@@ -12,19 +14,32 @@ public class Post {
 	private String username;
 	private String text;
 	private String uuidParent;
-	
 	// Formats output date when this DTO is passed through JSON
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
     // Allows yyyy-MM-dd date to be passed into GET request in JSON
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm")
 	private Timestamp created;
-
     // Formats output date when this DTO is passed through JSON
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
     // Allows yyyy-MM-dd date to be passed into GET request in JSON
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm")
 	private Timestamp modified;
+    
+    private List<Reaction> reactions;
 
+	public Post(Integer id, String uuid, String type, String username, String text, String uuidParent,
+			Timestamp created, Timestamp modified, List<Reaction> reactions) {
+		this.id = id;
+		this.uuid = uuid;
+		this.type = type;
+		this.username = username;
+		this.text = text;
+		this.uuidParent = uuidParent;
+		this.created = created;
+		this.modified = modified;
+		this.reactions = reactions;
+	}
+	
 	public Post(Integer id, String uuid, String type, String username, String text, String uuidParent,
 			Timestamp created, Timestamp modified) {
 		this.id = id;
@@ -107,5 +122,12 @@ public class Post {
 		this.modified = modified;
 	}
 
+	public List<Reaction> getReactions() {
+		return reactions;
+	}
+
+	public void setReactions(List<Reaction> reactions) {
+		this.reactions = reactions;
+	}
 	
 }

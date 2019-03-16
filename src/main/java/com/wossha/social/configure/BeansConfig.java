@@ -18,6 +18,8 @@ import com.wossha.social.commands.createPost.CreatePostCommand;
 import com.wossha.social.commands.createPost.CreatePostSerializer;
 import com.wossha.social.commands.followUser.FollowUserCommand;
 import com.wossha.social.commands.followUser.FollowUserSerializer;
+import com.wossha.social.commands.reactPost.ReactPostCommand;
+import com.wossha.social.commands.reactPost.ReactPostSerializer;
 import com.wossha.social.commands.refuseFollow.RefuseFollowCommand;
 import com.wossha.social.commands.refuseFollow.RefuseFollowSerializer;
 import com.wossha.social.commands.stopFollowingUser.StopFollowingUserCommand;
@@ -65,6 +67,11 @@ public class BeansConfig {
 		return new CreatePostCommand();
 	}
 	
+	@Bean
+	public ReactPostCommand reactPostCommand() {
+		return new ReactPostCommand();
+	}
+	
 	//serializers--------------------------------------------------
 	
 	@Bean
@@ -97,6 +104,11 @@ public class BeansConfig {
 		return new CreatePostSerializer();
 	}
 	
+	@Bean
+	public ReactPostSerializer reactPostSerializer() {
+		return new ReactPostSerializer();
+	}
+	
 	
 	//--------------------------------------------------------------
 	
@@ -109,6 +121,7 @@ public class BeansConfig {
 		cs.setChangeNotifToViewedSerializer(changeNotifToViewedSerializer());
 		cs.setRefuseFollowSerializer(refuseFollowSerializer());
 		cs.setCreatePostSerializer(createPostSerializer());
+		cs.setReactPostSerializer(reactPostSerializer());
 		cs.initMapper();
 		return cs;
 	}
