@@ -3,6 +3,7 @@ package com.wossha.social.infrastructure.repositories;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.skife.jdbi.v2.IDBI;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -85,8 +86,22 @@ public class SocialRepository implements Repository<FollowUser> {
 			history = socialDao.getPosts(username, init, limit);
 		}
 		
+		List<String> postUuids = history.stream().map(Post::getUuid).collect(Collectors.toList());
+		List<Reaction> reactions = socialDao.getReactionsByGroup(dbi, postUuids);
+		List<Post> comments = socialDao.getCommentsByGroup(dbi, postUuids);
+		
+		List<String> commentUuids = comments.stream().map(Post::getUuid).collect(Collectors.toList());
+		List<Reaction> commentsReactions = socialDao.getReactionsByGroup(dbi, commentUuids);
+		
+		for (int i = 0; i < comments.size(); i++) {
+			final String uuid = comments.get(i).getUuid();
+			comments.get(i).setReactions(commentsReactions.stream().filter(r -> r.getUuidPost().equals(uuid)).collect(Collectors.toList()));
+		}
+		
 		for (int i = 0; i < history.size(); i++) {
-			history.get(i).setReactions(socialDao.getReactions(history.get(i).getUuid()));
+			final String uuid = history.get(i).getUuid();
+			history.get(i).setReactions(reactions.stream().filter(r -> r.getUuidPost().equals(uuid)).collect(Collectors.toList()));
+			history.get(i).setComments(comments.stream().filter(c -> c.getUuidParent().equals(uuid)).collect(Collectors.toList()));
 		}
 		
 		Pagination pagination = new Pagination(count, init, limit);

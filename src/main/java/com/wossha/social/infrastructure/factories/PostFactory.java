@@ -12,6 +12,10 @@ public class PostFactory {
 		post.setType(PostTypesEnum.SIMPLE_POST.name());
 		post.setUsername(createPost.getUsername());
 		
+		if (createPost.getUuidParent() != null && !createPost.getUuidParent().equals("")) {
+			post.setUuidParent(createPost.getUuidParent());
+		}
+		
 		if (createPost.getText() != null && !createPost.getText().equals("")) {
 			post.setText(createPost.getText());
 		}

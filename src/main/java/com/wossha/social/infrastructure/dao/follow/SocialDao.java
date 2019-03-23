@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 import org.skife.jdbi.v2.Handle;
 import org.skife.jdbi.v2.IDBI;
+import org.skife.jdbi.v2.Query;
 import org.skife.jdbi.v2.Update;
 import org.skife.jdbi.v2.sqlobject.Bind;
 import org.skife.jdbi.v2.sqlobject.BindBean;
@@ -47,18 +48,18 @@ public abstract  class SocialDao {
 	@SqlQuery("select * from TWSS_NOTIFICATIONS WHERE RECEIVER_USERNAME = :username")
 	public abstract List<Notification> getUserNotifications(@Bind("username") String username);
 
-	@SqlQuery("SELECT count(*) FROM TWSS_POSTS WHERE USERNAME=:username")
+	@SqlQuery("SELECT count(*) FROM TWSS_POSTS WHERE USERNAME=:username AND UUID_PARENT is null")
 	public abstract Integer countMyPosts(@Bind("username") String username);
 	
 	@RegisterMapper(PostMapperJdbi.class)
-	@SqlQuery("SELECT * FROM TWSS_POSTS WHERE USERNAME=:username ORDER BY CREATED DESC OFFSET :init ROWS FETCH NEXT :limit ROWS ONLY")
+	@SqlQuery("SELECT * FROM TWSS_POSTS WHERE USERNAME=:username AND UUID_PARENT is null ORDER BY CREATED DESC OFFSET :init ROWS FETCH NEXT :limit ROWS ONLY")
 	public abstract List<Post> getMyPosts(@Bind("username") String username, @Bind("init") int init, @Bind("limit") int limit);
 	
-	@SqlQuery("SELECT count(*) FROM TWSS_POSTS")
+	@SqlQuery("SELECT count(*) FROM TWSS_POSTS WHERE UUID_PARENT is null")
 	public abstract Integer countPosts(@Bind("username") String username);
 	
 	@RegisterMapper(PostMapperJdbi.class)
-	@SqlQuery("SELECT * FROM TWSS_POSTS ORDER BY CREATED DESC OFFSET :init ROWS FETCH NEXT :limit ROWS ONLY")
+	@SqlQuery("SELECT * FROM TWSS_POSTS WHERE UUID_PARENT is null ORDER BY CREATED DESC OFFSET :init ROWS FETCH NEXT :limit ROWS ONLY")
 	public abstract List<Post> getPosts(@Bind("username") String username, @Bind("init") int init, @Bind("limit") int limit);
 	
 	@RegisterMapper(ReactionMapperJdbi.class)
@@ -72,6 +73,48 @@ public abstract  class SocialDao {
 	@RegisterMapper(ReactionMapperJdbi.class)
 	@SqlQuery("SELECT * FROM TWSS_REACTIONS WHERE UUID_POST=:uuidPost")
 	public abstract List<Reaction> getReactions(@Bind("uuidPost") String uuidPost);
+	
+	public List<Reaction> getReactionsByGroup(IDBI dbi, List<String> postUuids) {
+
+		BaseDao<Reaction> baseDao = new BaseDao<>();
+		String query = "SELECT * FROM TWSS_REACTIONS R ";
+		query += "WHERE R.UUID_POST IN (<postUuids>) ";
+		
+
+		Map<String, List<String>> typesBindMap = new HashMap<>();
+		typesBindMap.put("postUuids", postUuids);
+		query = baseDao.generateBingIdentifier(query, typesBindMap);
+
+		Handle h = dbi.open();
+		@SuppressWarnings("unchecked")
+		Query<Reaction> q = h.createQuery(query).map(new ReactionMapperJdbi());
+
+		q = baseDao.addInClauseBind(q, typesBindMap);
+		List<Reaction> output = (List<Reaction>) q.list();
+
+		return output;
+	}
+	
+	public List<Post> getCommentsByGroup(IDBI dbi, List<String> postUuids) {
+
+		BaseDao<Post> baseDao = new BaseDao<>();
+		String query = "SELECT * FROM TWSS_POSTS P ";
+		query += "WHERE P.UUID_PARENT IN (<postUuids>) ";
+		
+
+		Map<String, List<String>> typesBindMap = new HashMap<>();
+		typesBindMap.put("postUuids", postUuids);
+		query = baseDao.generateBingIdentifier(query, typesBindMap);
+
+		Handle h = dbi.open();
+		@SuppressWarnings("unchecked")
+		Query<Post> q = h.createQuery(query).map(new PostMapperJdbi());
+
+		q = baseDao.addInClauseBind(q, typesBindMap);
+		List<Post> output = (List<Post>) q.list();
+
+		return output;
+	}
 
 	
 	// INSERTS--------------------------------------------------------------------------------------------------------------------------------------

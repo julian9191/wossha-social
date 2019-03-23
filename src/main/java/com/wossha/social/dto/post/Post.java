@@ -26,9 +26,10 @@ public class Post {
 	private Timestamp modified;
     
     private List<Reaction> reactions;
+    private List<Post> comments;
 
 	public Post(Integer id, String uuid, String type, String username, String text, String uuidParent,
-			Timestamp created, Timestamp modified, List<Reaction> reactions) {
+			Timestamp created, Timestamp modified, List<Reaction> reactions, List<Post> comments) {
 		this.id = id;
 		this.uuid = uuid;
 		this.type = type;
@@ -38,6 +39,7 @@ public class Post {
 		this.created = created;
 		this.modified = modified;
 		this.reactions = reactions;
+		this.comments = comments;
 	}
 	
 	public Post(Integer id, String uuid, String type, String username, String text, String uuidParent,
@@ -128,6 +130,14 @@ public class Post {
 
 	public void setReactions(List<Reaction> reactions) {
 		this.reactions = reactions;
+	}
+
+	public List<Post> getComments() {
+		return comments;
+	}
+
+	public void setComments(List<Post> comments) {
+		this.comments = comments;
 	}
 	
 }

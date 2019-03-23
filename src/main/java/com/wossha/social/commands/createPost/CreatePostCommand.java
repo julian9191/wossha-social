@@ -46,6 +46,7 @@ public class CreatePostCommand implements ICommand<CreatePost> {
 		Post post = PostFactory.createPost(data);
 		repo.addPost(post);
 		
+		result.setMessage(post.getUuid());
 		return result;
 	}
 	

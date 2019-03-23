@@ -4,8 +4,16 @@ public class CreatePost {
 
 	private String commandName;
 	private String username;
+	private String uuidParent;
 	private String text;
 	
+	public CreatePost(String commandName, String username, String uuidParent, String text) {
+		this.commandName = commandName;
+		this.username = username;
+		this.uuidParent = uuidParent;
+		this.text = text;
+	}
+
 	public CreatePost(String commandName, String username, String text) {
 		this.commandName = commandName;
 		this.username = username;
@@ -37,5 +45,14 @@ public class CreatePost {
 	public void setText(String text) {
 		this.text = text;
 	}
+
+	public String getUuidParent() {
+		return uuidParent;
+	}
+
+	public void setUuidParent(String uuidParent) {
+		this.uuidParent = uuidParent;
+	}
+	
 	
 }
