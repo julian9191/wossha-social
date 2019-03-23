@@ -1,5 +1,6 @@
 package com.wossha.social.infrastructure.dao.follow;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -76,6 +77,10 @@ public abstract  class SocialDao {
 	
 	public List<Reaction> getReactionsByGroup(IDBI dbi, List<String> postUuids) {
 
+		if(postUuids.isEmpty()) {
+			return new ArrayList<Reaction>();
+		}
+		
 		BaseDao<Reaction> baseDao = new BaseDao<>();
 		String query = "SELECT * FROM TWSS_REACTIONS R ";
 		query += "WHERE R.UUID_POST IN (<postUuids>) ";
@@ -97,6 +102,10 @@ public abstract  class SocialDao {
 	
 	public List<Post> getCommentsByGroup(IDBI dbi, List<String> postUuids) {
 
+		if(postUuids.isEmpty()) {
+			return new ArrayList<Post>();
+		}
+		
 		BaseDao<Post> baseDao = new BaseDao<>();
 		String query = "SELECT * FROM TWSS_POSTS P ";
 		query += "WHERE P.UUID_PARENT IN (<postUuids>) ";
