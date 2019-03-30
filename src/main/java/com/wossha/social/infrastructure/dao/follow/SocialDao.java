@@ -101,6 +101,31 @@ public abstract  class SocialDao {
 		return output;
 	}
 	
+	public List<Attachment> getAttachmentsByGroup(IDBI dbi, List<String> postUuids) {
+
+		if(postUuids.isEmpty()) {
+			return new ArrayList<Attachment>();
+		}
+		
+		BaseDao<Attachment> baseDao = new BaseDao<>();
+		String query = "SELECT * FROM TWSS_ATTACHMENTS R ";
+		query += "WHERE R.UUID_POST IN (<postUuids>) ";
+		
+
+		Map<String, List<String>> typesBindMap = new HashMap<>();
+		typesBindMap.put("postUuids", postUuids);
+		query = baseDao.generateBingIdentifier(query, typesBindMap);
+
+		Handle h = dbi.open();
+		@SuppressWarnings("unchecked")
+		Query<Attachment> q = h.createQuery(query).map(new AttachmentMapperJdbi());
+
+		q = baseDao.addInClauseBind(q, typesBindMap);
+		List<Attachment> output = (List<Attachment>) q.list();
+
+		return output;
+	}
+	
 	public List<Post> getCommentsByGroup(IDBI dbi, List<String> postUuids) {
 
 		if(postUuids.isEmpty()) {

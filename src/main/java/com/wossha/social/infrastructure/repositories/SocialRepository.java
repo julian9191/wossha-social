@@ -95,20 +95,25 @@ public class SocialRepository implements Repository<FollowUser> {
 		}
 		
 		List<String> postUuids = history.stream().map(Post::getUuid).collect(Collectors.toList());
-		List<Reaction> reactions = socialDao.getReactionsByGroup(dbi, postUuids);
 		List<Post> comments = socialDao.getCommentsByGroup(dbi, postUuids);
-		
 		List<String> commentUuids = comments.stream().map(Post::getUuid).collect(Collectors.toList());
-		List<Reaction> commentsReactions = socialDao.getReactionsByGroup(dbi, commentUuids);
+		if(commentUuids != null && !commentUuids.isEmpty()) {
+			postUuids.addAll(commentUuids);
+		}
+		
+		List<Reaction> reactions = socialDao.getReactionsByGroup(dbi, postUuids);
+		List<Attachment> attachments = socialDao.getAttachmentsByGroup(dbi, postUuids);
 		
 		for (int i = 0; i < comments.size(); i++) {
 			final String uuid = comments.get(i).getUuid();
-			comments.get(i).setReactions(commentsReactions.stream().filter(r -> r.getUuidPost().equals(uuid)).collect(Collectors.toList()));
+			comments.get(i).setReactions(reactions.stream().filter(r -> r.getUuidPost().equals(uuid)).collect(Collectors.toList()));
+			comments.get(i).setAttachments(attachments.stream().filter(a -> a.getUuidPost().equals(uuid)).collect(Collectors.toList()));
 		}
 		
 		for (int i = 0; i < history.size(); i++) {
 			final String uuid = history.get(i).getUuid();
 			history.get(i).setReactions(reactions.stream().filter(r -> r.getUuidPost().equals(uuid)).collect(Collectors.toList()));
+			history.get(i).setAttachments(attachments.stream().filter(a -> a.getUuidPost().equals(uuid)).collect(Collectors.toList()));
 			history.get(i).setComments(comments.stream().filter(c -> c.getUuidParent().equals(uuid)).collect(Collectors.toList()));
 		}
 		

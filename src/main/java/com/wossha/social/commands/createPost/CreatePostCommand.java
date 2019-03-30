@@ -91,9 +91,9 @@ public class CreatePostCommand implements ICommand<CreatePost> {
 		List<PictureInfo> pictures = new ArrayList<>();
 
 		for (int i = 0; i < attachments.size(); i++) {
-			PictureInfo pictureInfo = new PictureInfo(attachments.get(i).getUuid(),
+			PictureInfo pictureInfo = new PictureInfo(attachments.get(i).getUrl(),
 					data.getImages().get(i).getFilename(), data.getImages().get(i).getFiletype(),
-					PictureTypesEnum.CLOTHE_PICTURE.name(), data.getImages().get(i).getSize(),
+					PictureTypesEnum.POST_PICTURE.name(), data.getImages().get(i).getSize(),
 					data.getImages().get(i).getValue(), null);
 
 			pictures.add(pictureInfo);
