@@ -1,11 +1,16 @@
 package com.wossha.social.commands.createPost.model;
 
+import java.util.List;
+
+import com.wossha.msbase.models.PictureFileDTO;
+
 public class CreatePost {
 
 	private String commandName;
 	private String username;
 	private String uuidParent;
 	private String text;
+	private List<PictureFileDTO> images;
 	
 	public CreatePost(String commandName, String username, String uuidParent, String text) {
 		this.commandName = commandName;
@@ -53,6 +58,13 @@ public class CreatePost {
 	public void setUuidParent(String uuidParent) {
 		this.uuidParent = uuidParent;
 	}
-	
+
+	public List<PictureFileDTO> getImages() {
+		return images;
+	}
+
+	public void setImages(List<PictureFileDTO> images) {
+		this.images = images;
+	}
 	
 }

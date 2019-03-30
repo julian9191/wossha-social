@@ -18,6 +18,7 @@ import com.wossha.social.infrastructure.dao.BaseDao;
 import com.wossha.social.commands.followUser.model.FollowUser;
 import com.wossha.social.dto.FollowingUser;
 import com.wossha.social.dto.Notification;
+import com.wossha.social.dto.post.Attachment;
 import com.wossha.social.dto.post.Post;
 import com.wossha.social.dto.post.Reaction;
 import com.wossha.social.infrastructure.websocket.model.ChatMessage;
@@ -142,6 +143,9 @@ public abstract  class SocialDao {
 	
 	@SqlUpdate("Insert into TWSS_REACTIONS (UUID,TYPE,UUID_POST,USERNAME) values (:reaction.uuid, :reaction.type, :reaction.uuidPost, :reaction.username)")
 	public abstract void addReaction(@BindBean("reaction") Reaction reaction);
+	
+	@SqlUpdate("Insert into TWSS_ATTACHMENTS (UUID,TYPE,UUID_POST,URL) values (:attachment.uuid, :attachment.type, :attachment.uuidPost, :attachment.url)")
+	public abstract void addAttachments(@BindBean("attachment") Attachment attachment);
 	
 	// UPDATES--------------------------------------------------------------------------------------------------------------------------------------
 

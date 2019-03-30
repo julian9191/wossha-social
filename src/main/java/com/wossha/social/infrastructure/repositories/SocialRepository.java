@@ -12,6 +12,7 @@ import com.wossha.msbase.models.Pagination;
 import com.wossha.social.commands.followUser.model.FollowUser;
 import com.wossha.social.dto.FollowingUser;
 import com.wossha.social.dto.Notification;
+import com.wossha.social.dto.post.Attachment;
 import com.wossha.social.dto.post.Post;
 import com.wossha.social.dto.post.Reaction;
 import com.wossha.social.infrastructure.dao.follow.SocialDao;
@@ -46,6 +47,13 @@ public class SocialRepository implements Repository<FollowUser> {
 	public void addReaction(Reaction reaction) {
 		socialDao = dbi.onDemand(SocialDao.class);
 		socialDao.addReaction(reaction);
+	}
+	
+	public void addAttachments(List<Attachment> attachments) {
+		socialDao = dbi.onDemand(SocialDao.class);
+		for (Attachment attachment : attachments) {
+			socialDao.addAttachments(attachment);
+		}
 	}
 
 	public FollowUser getFollowersRelationship(String senderUsername, String receiverUsername) {
@@ -173,6 +181,5 @@ public class SocialRepository implements Repository<FollowUser> {
 
 	}
 
-	
 
 }
