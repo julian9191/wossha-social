@@ -45,7 +45,7 @@ public class CommandProcessor extends ControllerWrapper{
     JmsTemplate jmsTemplate;
 
     @PostMapping("/commands")
-    public ResponseEntity<HashMap<String, String>> processCommand(@RequestBody String json) {
+    public ResponseEntity<HashMap<String, Object>> processCommand(@RequestBody String json) {
         try {
         	
         	JsonNode root = mapper.readTree(json);
@@ -65,11 +65,11 @@ public class CommandProcessor extends ControllerWrapper{
             
             publishEvents(result.getEvents());
 
-            return new ResponseEntity<HashMap<String, String>>(wrapMessaje(result.getMessage()),HttpStatus.OK);
+            return new ResponseEntity<HashMap<String, Object>>(wrapMessaje(result.getMessage(), result.getResponse()),HttpStatus.OK);
         } catch (TechnicalException e) {
-            return new ResponseEntity<HashMap<String, String>>(wrapMessaje(e.getMessage()),HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<HashMap<String, Object>>(wrapMessaje(e.getMessage(), null),HttpStatus.INTERNAL_SERVER_ERROR);
         } catch (  IOException | BusinessException e) {
-        	return new ResponseEntity<HashMap<String, String>>(wrapMessaje(e.getMessage()),HttpStatus.BAD_REQUEST);
+        	return new ResponseEntity<HashMap<String, Object>>(wrapMessaje(e.getMessage(), null),HttpStatus.BAD_REQUEST);
         }
     }
     

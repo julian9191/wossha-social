@@ -1,10 +1,7 @@
 package com.wossha.social.commands.createPost;
 
-import java.sql.Timestamp;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.simp.SimpMessageSendingOperations;
 import org.springframework.stereotype.Component;
@@ -57,7 +54,8 @@ public class CreatePostCommand implements ICommand<CreatePost> {
 	@Override
 	public CommandResult execute() throws BusinessException, TechnicalException {
 		CommandResult result = new CommandResult();
-
+		CreatePostResponse createPostResponse = new CreatePostResponse();
+		
 		Post post = PostFactory.createPost(data);
 		repo.addPost(post);
 
@@ -65,12 +63,14 @@ public class CreatePostCommand implements ICommand<CreatePost> {
 
 			List<Attachment> attachments = getAttachments(data.getImages(), post);
 			repo.addAttachments(attachments);
+			createPostResponse.setAttachments(attachments);
 
 			Event savePictureEvent = generateSavePictureEvent(attachments);
 			result.addEvent(savePictureEvent);
 		}
-
-		result.setMessage(post.getUuid());
+		
+		createPostResponse.setUuidPost(post.getUuid());
+		result.setResponse(createPostResponse);
 		return result;
 	}
 
@@ -108,6 +108,25 @@ public class CreatePostCommand implements ICommand<CreatePost> {
 	@Override
 	public void setUsername(String username) {
 		this.username = username;
+	}
+	
+	
+	public class CreatePostResponse{
+		private String uuidPost;
+		private List<Attachment> attachments;
+		
+		public String getUuidPost() {
+			return uuidPost;
+		}
+		public void setUuidPost(String uuidPost) {
+			this.uuidPost = uuidPost;
+		}
+		public List<Attachment> getAttachments() {
+			return attachments;
+		}
+		public void setAttachments(List<Attachment> attachments) {
+			this.attachments = attachments;
+		}
 	}
 
 }
