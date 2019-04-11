@@ -10,18 +10,21 @@ public class PostFactory {
 	public static Post createPost(CreatePost createPost) {
 		Post post = new Post(UUIDGenerator.generateUUID());
 		post.setUsername(createPost.getUsername());
-		
-		if(createPost.getImages() == null || createPost.getImages().isEmpty()) {
+
+		if ((createPost.getImages() == null || createPost.getImages().isEmpty())
+				&& (createPost.getVideoCode() == null || createPost.getVideoCode().equals(""))) {
 			post.setType(PostTypesEnum.SIMPLE_POST.name());
+			
+		} else if(createPost.getVideoCode() != null && !createPost.getVideoCode().equals("")){
+			post.setType(PostTypesEnum.VIDEO_POST.name());
 		}else {
 			post.setType(PostTypesEnum.IMAGE_POST.name());
 		}
-		
-		
+
 		if (createPost.getUuidParent() != null && !createPost.getUuidParent().equals("")) {
 			post.setUuidParent(createPost.getUuidParent());
 		}
-		
+
 		if (createPost.getText() != null && !createPost.getText().equals("")) {
 			post.setText(createPost.getText());
 		}

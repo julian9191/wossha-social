@@ -67,6 +67,15 @@ public class CreatePostCommand implements ICommand<CreatePost> {
 
 			Event savePictureEvent = generateSavePictureEvent(attachments);
 			result.addEvent(savePictureEvent);
+			
+		}else if (post.getType().equals(PostTypesEnum.VIDEO_POST.name())) {
+			Attachment attachment = new Attachment(null, UUIDGenerator.generateUUID(), PostTypesEnum.VIDEO_POST.name(),
+					post.getUuid(), data.getVideoCode(), null, null);
+			
+			repo.addAttachment(attachment);
+			List<Attachment> attachments = new ArrayList<Attachment>();
+			attachments.add(attachment);
+			createPostResponse.setAttachments(attachments);
 		}
 		
 		createPostResponse.setUuidPost(post.getUuid());

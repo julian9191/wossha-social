@@ -55,6 +55,11 @@ public class SocialRepository implements Repository<FollowUser> {
 			socialDao.addAttachments(attachment);
 		}
 	}
+	
+	public void addAttachment(Attachment attachment) {
+		socialDao = dbi.onDemand(SocialDao.class);
+		socialDao.addAttachments(attachment);
+	}
 
 	public FollowUser getFollowersRelationship(String senderUsername, String receiverUsername) {
 		socialDao = dbi.onDemand(SocialDao.class);

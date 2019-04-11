@@ -11,6 +11,7 @@ public class CreatePost {
 	private String uuidParent;
 	private String text;
 	private List<PictureFileDTO> images;
+	private String videoCode;
 	
 	public CreatePost(String commandName, String username, String uuidParent, String text) {
 		this.commandName = commandName;
@@ -65,6 +66,14 @@ public class CreatePost {
 
 	public void setImages(List<PictureFileDTO> images) {
 		this.images = images;
+	}
+
+	public String getVideoCode() {
+		return videoCode;
+	}
+
+	public void setVideoCode(String videoCode) {
+		this.videoCode = videoCode;
 	}
 	
 }
