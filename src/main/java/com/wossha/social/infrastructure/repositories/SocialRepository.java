@@ -129,6 +129,11 @@ public class SocialRepository implements Repository<FollowUser> {
 		return resultMap;
 	}
 	
+	public List<String> getOwnPosts(List<String> uuidPosts, String username) {
+		socialDao = dbi.onDemand(SocialDao.class);
+		return socialDao.getOwnPosts(dbi, uuidPosts, username);
+	}
+	
 	public Reaction getReactionByType(String username, String uuidPost, String reactionType) {
 		socialDao = dbi.onDemand(SocialDao.class);
 		return socialDao.getReactionByType(username, uuidPost, reactionType);
@@ -174,6 +179,22 @@ public class SocialRepository implements Repository<FollowUser> {
 	public void removeReaction(String username, String uuidPost, String reactionType) {
 		socialDao = dbi.onDemand(SocialDao.class);
 		socialDao.removeReaction(username, uuidPost, reactionType);
+	}
+	
+	public void deleteAllReactions(List<String> uuidPosts) {
+		socialDao = dbi.onDemand(SocialDao.class);
+		socialDao.deleteAllReactions(dbi, uuidPosts);
+		
+	}
+	
+	public void deleteAttachments(List<String> uuidPosts, String username) {
+		socialDao = dbi.onDemand(SocialDao.class);
+		socialDao.deleteAttachments(dbi, username, uuidPosts);
+	}
+
+	public void deletePosts(List<String> uuidPosts, String username) {
+		socialDao = dbi.onDemand(SocialDao.class);
+		socialDao.deletePosts(dbi, username, uuidPosts);
 	}
 	
 	public void changeNotifToViewed(String username, List<String> ids) {

@@ -7,6 +7,7 @@ import com.wossha.msbase.commands.ICommandSerializer;
 import com.wossha.social.commands.acceptFollow.AcceptFollowSerializer;
 import com.wossha.social.commands.changeNotifToViewed.ChangeNotifToViewedSerializer;
 import com.wossha.social.commands.createPost.CreatePostSerializer;
+import com.wossha.social.commands.deletePost.DeletePostSerializer;
 import com.wossha.social.commands.followUser.FollowUserSerializer;
 import com.wossha.social.commands.reactPost.ReactPostSerializer;
 import com.wossha.social.commands.refuseFollow.RefuseFollowSerializer;
@@ -25,6 +26,7 @@ public class CommandSerializers {
     private RefuseFollowSerializer refuseFollowSerializer;
     private CreatePostSerializer createPostSerializer;
     private ReactPostSerializer reactPostSerializer;
+    private DeletePostSerializer deletePostSerializer;
 
 	public void initMapper() {
         processors.put("FollowUser", followUserSerializer);
@@ -34,6 +36,7 @@ public class CommandSerializers {
         processors.put("RefuseFollow", refuseFollowSerializer);
         processors.put("CreatePost", createPostSerializer);
         processors.put("ReactPost", reactPostSerializer);
+        processors.put("DeletePost", deletePostSerializer);
 	}
 
     public ICommandSerializer get(String commandName) {
@@ -67,5 +70,9 @@ public class CommandSerializers {
 	public void setReactPostSerializer(ReactPostSerializer reactPostSerializer) {
 		this.reactPostSerializer = reactPostSerializer;
 	}
-	
+
+	public void setDeletePostSerializer(DeletePostSerializer deletePostSerializer) {
+		this.deletePostSerializer = deletePostSerializer;
+	}
+
 }

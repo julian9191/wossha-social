@@ -16,6 +16,8 @@ import com.wossha.social.commands.changeNotifToViewed.ChangeNotifToViewedCommand
 import com.wossha.social.commands.changeNotifToViewed.ChangeNotifToViewedSerializer;
 import com.wossha.social.commands.createPost.CreatePostCommand;
 import com.wossha.social.commands.createPost.CreatePostSerializer;
+import com.wossha.social.commands.deletePost.DeletePostCommand;
+import com.wossha.social.commands.deletePost.DeletePostSerializer;
 import com.wossha.social.commands.followUser.FollowUserCommand;
 import com.wossha.social.commands.followUser.FollowUserSerializer;
 import com.wossha.social.commands.reactPost.ReactPostCommand;
@@ -31,7 +33,7 @@ public class BeansConfig {
 	
 	@Bean
 	public SocialRepository socialRepository() {
-			return new SocialRepository();
+		return new SocialRepository();
 	}
 
 	
@@ -72,6 +74,11 @@ public class BeansConfig {
 		return new ReactPostCommand();
 	}
 	
+	@Bean
+	public DeletePostCommand deletePostCommand() {
+		return new DeletePostCommand();
+	}
+	
 	//serializers--------------------------------------------------
 	
 	@Bean
@@ -109,6 +116,11 @@ public class BeansConfig {
 		return new ReactPostSerializer();
 	}
 	
+	@Bean
+	public DeletePostSerializer deletePostSerializer() {
+		return new DeletePostSerializer();
+	}
+	
 	
 	//--------------------------------------------------------------
 	
@@ -122,6 +134,7 @@ public class BeansConfig {
 		cs.setRefuseFollowSerializer(refuseFollowSerializer());
 		cs.setCreatePostSerializer(createPostSerializer());
 		cs.setReactPostSerializer(reactPostSerializer());
+		cs.setDeletePostSerializer(deletePostSerializer());
 		cs.initMapper();
 		return cs;
 	}

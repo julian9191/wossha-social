@@ -17,6 +17,7 @@ public class AttachmentMapperJdbi implements ResultSetMapper<Attachment> {
     			r.getString("TYPE"),
     			r.getString("UUID_POST"),
     			r.getString("URL"),
+    			r.getString("USERNAME"),
     			r.getTimestamp("CREATED"),
 				r.getTimestamp("MODIFIED")
     	);

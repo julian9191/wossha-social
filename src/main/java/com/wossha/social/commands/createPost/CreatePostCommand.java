@@ -70,7 +70,7 @@ public class CreatePostCommand implements ICommand<CreatePost> {
 			
 		}else if (post.getType().equals(PostTypesEnum.VIDEO_POST.name())) {
 			Attachment attachment = new Attachment(null, UUIDGenerator.generateUUID(), PostTypesEnum.VIDEO_POST.name(),
-					post.getUuid(), data.getVideoCode(), null, null);
+					post.getUuid(), data.getVideoCode(), username, null, null);
 			
 			repo.addAttachment(attachment);
 			List<Attachment> attachments = new ArrayList<Attachment>();
@@ -88,7 +88,7 @@ public class CreatePostCommand implements ICommand<CreatePost> {
 
 		for (PictureFileDTO image : images) {
 			Attachment attachment = new Attachment(null, UUIDGenerator.generateUUID(), PostTypesEnum.IMAGE_POST.name(),
-					post.getUuid(), UUIDGenerator.generateUUID(), null, null);
+					post.getUuid(), UUIDGenerator.generateUUID(), username, null, null);
 
 			attachments.add(attachment);
 		}

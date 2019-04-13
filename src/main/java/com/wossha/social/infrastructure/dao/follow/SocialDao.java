@@ -150,6 +150,28 @@ public abstract  class SocialDao {
 
 		return output;
 	}
+	
+	public List<String> getOwnPosts(IDBI dbi, List<String> uuidPosts, String username) {
+	
+		BaseDao<String> baseDao = new BaseDao<>();
+		String query = "SELECT UUID FROM TWSS_POSTS P ";
+		query += "WHERE P.UUID IN (<uuidPosts>) AND USERNAME = :username ";
+		
+
+		Map<String, List<String>> typesBindMap = new HashMap<>();
+		typesBindMap.put("uuidPosts", uuidPosts);
+		query = baseDao.generateBingIdentifier(query, typesBindMap);
+
+		Handle h = dbi.open();
+		@SuppressWarnings("unchecked")
+		Query<String> q = h.createQuery(query).mapTo(String.class)
+		.bind("username", username);
+
+		q = baseDao.addInClauseBind(q, typesBindMap);
+		List<String> output = (List<String>) q.list();
+
+		return output;
+	}
 
 	
 	// INSERTS--------------------------------------------------------------------------------------------------------------------------------------
@@ -169,7 +191,7 @@ public abstract  class SocialDao {
 	@SqlUpdate("Insert into TWSS_REACTIONS (UUID,TYPE,UUID_POST,USERNAME) values (:reaction.uuid, :reaction.type, :reaction.uuidPost, :reaction.username)")
 	public abstract void addReaction(@BindBean("reaction") Reaction reaction);
 	
-	@SqlUpdate("Insert into TWSS_ATTACHMENTS (UUID,TYPE,UUID_POST,URL) values (:attachment.uuid, :attachment.type, :attachment.uuidPost, :attachment.url)")
+	@SqlUpdate("Insert into TWSS_ATTACHMENTS (UUID,TYPE,UUID_POST,URL,USERNAME) values (:attachment.uuid, :attachment.type, :attachment.uuidPost, :attachment.url, :attachment.username)")
 	public abstract void addAttachments(@BindBean("attachment") Attachment attachment);
 	
 	// UPDATES--------------------------------------------------------------------------------------------------------------------------------------
@@ -210,5 +232,56 @@ public abstract  class SocialDao {
 	
 	@SqlUpdate("DELETE FROM TWSS_REACTIONS WHERE USERNAME=:username AND UUID_POST=:uuidPost AND TYPE=:reactionType")
 	public abstract void removeReaction(@Bind("username") String username, @Bind("uuidPost") String uuidPost, @Bind("reactionType") String reactionType);
+	
+	public void deleteAllReactions(IDBI dbi, List<String> uuidPost) {
+
+		BaseDao baseDao = new BaseDao<>();
+		String query = "DELETE FROM TWSS_REACTIONS WHERE UUID_POST IN (<uuidPost>)";
+
+		Map<String, List<String>> typesBindMap = new HashMap<>();
+		typesBindMap.put("uuidPost", uuidPost);
+		query = baseDao.generateBingIdentifier(query, typesBindMap);
+
+		Handle h = dbi.open();	
+		Update q = h.createStatement(query);
+
+		q = baseDao.addInClauseBindUpdate(q, typesBindMap);
+		q.execute();
+	}
+	
+	public void deleteAttachments(IDBI dbi, String username, List<String> uuidPosts) {
+
+		BaseDao baseDao = new BaseDao<>();
+		String query = "DELETE FROM TWSS_ATTACHMENTS WHERE USERNAME=:username AND UUID_POST IN (<uuidPosts>)";
+
+		Map<String, List<String>> typesBindMap = new HashMap<>();
+		typesBindMap.put("uuidPosts", uuidPosts);
+		query = baseDao.generateBingIdentifier(query, typesBindMap);
+
+		Handle h = dbi.open();	
+		Update q = h.createStatement(query)
+		.bind("username", username);
+
+		q = baseDao.addInClauseBindUpdate(q, typesBindMap);
+		q.execute();
+	}
+	
+	public void deletePosts(IDBI dbi, String username, List<String> uuidPosts) {
+
+		BaseDao baseDao = new BaseDao<>();
+		String query = "DELETE FROM TWSS_POSTS WHERE USERNAME=:username AND UUID IN (<uuidPosts>)";
+
+		Map<String, List<String>> typesBindMap = new HashMap<>();
+		typesBindMap.put("uuidPosts", uuidPosts);
+		query = baseDao.generateBingIdentifier(query, typesBindMap);
+
+		Handle h = dbi.open();	
+		Update q = h.createStatement(query)
+		.bind("username", username);
+
+		q = baseDao.addInClauseBindUpdate(q, typesBindMap);
+		q.execute();
+	}
+
 	
 }

@@ -13,6 +13,7 @@ public class Attachment {
 	private String type;
 	private String uuidPost;
 	private String url;
+	private String username;
 	// Formats output date when this DTO is passed through JSON
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
     // Allows yyyy-MM-dd date to be passed into GET request in JSON
@@ -24,13 +25,14 @@ public class Attachment {
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm")
 	private Timestamp modified;
     
-	public Attachment(Integer id, String uuid, String type, String uuidPost, String url, Timestamp created,
+	public Attachment(Integer id, String uuid, String type, String uuidPost, String url, String username, Timestamp created,
 			Timestamp modified) {
 		this.id = id;
 		this.uuid = uuid;
 		this.type = type;
 		this.uuidPost = uuidPost;
 		this.url = url;
+		this.username = username;
 		this.created = created;
 		this.modified = modified;
 	}
@@ -75,6 +77,14 @@ public class Attachment {
 
 	public void setUrl(String url) {
 		this.url = url;
+	}
+
+	public String getUsername() {
+		return username;
+	}
+
+	public void setUsername(String username) {
+		this.username = username;
 	}
 
 	public Timestamp getCreated() {
